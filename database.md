@@ -6,3 +6,5 @@
 - If by knowing the value of A we can find the value of B, then we would say that B is functionally dependent on A.
 
 - In functional dependencies, the attribute whose value is known or given is referred to as the determinant.
+
+
