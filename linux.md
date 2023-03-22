@@ -5,8 +5,6 @@ Intro
 - Author: Yunyi Li
 - This is to take notes for Level2 Linux course and practice VIM and markdown.
 
----
-
 ## 2 Basic Command
 
 Shortcut
@@ -238,7 +236,6 @@ mounting and / root dir
 
 ## 5 User Management
 
-
 - Add a user
   - sudo useradd alex -m -d /home/alex -e 2030-12-31 -s /bin/bash
   - -d to set directory
@@ -282,6 +279,8 @@ user modification
   - groups
 - list the contents of the home directory, observe the owner and group.
   - ls -l /home
+- Check the id, primary group, and supplementory group of a user
+  - id username
 - Create a group: addgroup
   - sudo addgroup archery 
 - Associate user ariana to the groups archery, sudo and cdrom 
@@ -378,3 +377,16 @@ Using Quotation
 - echo '$(1+3)':
 echo "$(1+3)"
 - echo `1+3`:
+
+
+- $?: This variable contains the exit status of the last executed command. The exit status is an integer value between 0 and 255 that indicates whether the command succeeded or failed. A value of 0 indicates success, while any other value indicates an error.
+- $0: This variable contains the name of the currently running shell or script. For example, "myscript.sh".
+- $#: This variable contains the number of arguments passed to a script or function. For example, if you run a script with the command "myscript.sh arg1 arg2 arg3", $# would contain the value "3".
+
+
+## 12 Array 
+
+Declaring an Array
+- orchid=(brassavola brassia cattleya cymbidium dendrobium encyclia laelia masdevallia
+miltonia odontoglossum oncidium paphiopedilum phalaenopsis)
+
