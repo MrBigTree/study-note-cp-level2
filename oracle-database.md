@@ -31,3 +31,9 @@
 
 
 SQL> desc table_name 
+
+SET SERVEROUTPUT ON // by default no output shown in cmd
+
+ed // open the last sql script you inputed
+
+:= // assign a variable in pl/sql
