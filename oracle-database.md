@@ -37,3 +37,14 @@ SET SERVEROUTPUT ON // by default no output shown in cmd
 ed // open the last sql script you inputed
 
 := // assign a variable in pl/sql
+
+
+trigger: timing, event, object
+
+run cmd as admin so you can see the texteditor 
+
+
+/
+show error
+
+desc my_pack
