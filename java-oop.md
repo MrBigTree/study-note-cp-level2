@@ -212,5 +212,31 @@ implementation.
 - give you a log of all methods executed success or not: catch (IOException exception)  {exception.printStackTrace();}
 
 
+what is checked and unchecked exception in simple words
+- checked exception 
+  - The classes which directly inherit Throwable class except RuntimeException
+  - checked at compile time.
+- unchecked exception 
+  - The classes which inherit RuntimeException
+    - ArithmeticException , 
+    - IllegalArgumentException ,
+    - NullPointerException , 
+    - ArrayIndexOutOfBoundsException
+  - Checked at runtime.
 
 
+print start trees in java to narrow down issues
+
+arraylist
+
+collection 
+- is a framework that provides an architecture to store and manipulate a group of objects. 
+- 5 keywords of collection: It can achieve all the operations that you perform on a data including searching , sorting, insertion , manipulation , and deletion
+
+
+Collections Framework
+- list: ordered
+- set: unordered, unique
+- stack: last in first out; only add and remove at the top
+- quene: first in first out
+- map: key and value
