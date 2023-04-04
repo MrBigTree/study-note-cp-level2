@@ -181,62 +181,102 @@ Accessibility of Data Members | Members of a Java interface are public. | abstra
 
 ## 9. EXCEOPTION HANDLING
 
-### intro 
-- indication of problem occurs during program's exception 
-- Robust and fault tolerant programs (i.e., programs that can deal with problems as they arise and continue executing ).
-- when to use?  
-  - synchronous errors
-- not designed for?
-  - asynchronous events
-    - disk I/O completions
-    - network message arrivals
-    - mouse clicks and keystrokes
-- Exception handling provides a single uniform technique for documenting , detecting and recovering from errors.
-- Better to incorporate exception handling and error recovery strategy from the beginning of your design process than at the end of
-implementation.
+### 9.1 intro 
 
-### Keywords Associated with Exception
+what is exception?
+- An Exception is an unwanted event that interrupts the normal flow of the program. 
+- It is not a good programming practice to leave exceptions unhandled (i.e. the system THROW a exception and stop the program)
+- Exception - indication of problem occurs during program's excution 
+
+Why an exception occurs?
+- ArithmeticException: divide a number by zero
+- NullPointerException: When a variable contains null value and you are performing an operation on the variable.
+- NumberFormatException: a type mismatch. Let’s say you are trying to perform an arithmetic operator on a string variable.
+- ArrayIndexOutOfBoundsException: access the array index which is beyond the size of array
+
+What and why exception handling?
+- Exception handling allows us to handle the runtime errors caused by exceptions.
+- These system generated messages are not user friendly so a user will not be able to understand what went wrong. In order to let them know the reason in simple language, we handle exceptions. We handle such exceptions and then prints a user friendly warning message to user, which lets them correct the error as most of the time exception occurs due to bad data provided by user.
+- Exception handling ensures that the FLOW OF THE PROGRAM doesn’t break when an exception occurs.
+- A program can continue executing (maintain normal flow rather than terminating ) after dealing with a problem.
+  - Robust and fault tolerant programs (i.e., programs that can deal with problems as they arise and continue executing ).
+
+When to Use Exception Handling
+- Exception handling is designed to process SYNCHRONOUS errors, which occur when a statement executes .
+  - e.g. out of range array indices, arithmetic overflow, division by zero, invalid method parameters
+- Exception handling is NOT designed for Asynchronous events
+  - e.g. disk I/O completions, network message arrivals, mouse clicks and keystrokes
+
+Think it through
+- Exception handling provides a single uniform technique for documenting , detecting and recovering from errors.
+- Better to incorporate exception handling and error recovery strategy from the BEGINNING of your design process than at the end of implementation.
+
+Types of Exception
+- user-defined exception
+- built-in Exception
+  - checked exception 
+    - The classes which directly inherit Throwable class except RuntimeException: IOException and ClassNotFoundException
+    - If some code within a method throws a checked exception, then the method must either handle the exception or it must specify the exception using the throws keyword in method signature.
+    - Checked exceptions are due to external circumstances that the programmer cannot prevent (no matter how careful you are: disk error, broken network connection)
+    - The compiler checks that your program handles these exceptions.
+    - Program will not compile if no indication of how to handle checked exceptions
+  - unchecked exception: 
+    - programmer’s fault
+    - not checked at compile time so compiler doesn't check whether progrmmer has handled them or not. 
+    - The classes which inherit RuntimeException
+      - ArithmeticException , 
+      - IllegalArgumentException ,
+      - NullPointerException , 
+      - ArrayIndexOutOfBoundsException
+
+Errors
+- doesn’t occur due to bad data entered by user
+- indicates a system failure, disk crash or resource unavailability
+- Error is irrecoverable: not in the scope of a programmer to handle. 
+  - OutOfMemoryError, VirtualMachineError, AssertionError etc.
+
+Difference between error and exception
+- Errors 1. something went wrong which is not in the scope of a programmer to handle. 2. the error doesn’t occur due to bad data entered by user rather it indicates a system failure, disk crash or resource unavailability.
+- Exceptions are events that occurs during runtime due to BAD DATA entered 
+
+### Frequently used terms in Exception handling 
 - Try 
-  - to put exception code
+  - The code that can cause the exception
   - must followed by either Catch or Finally
   - cannot standalone
 - Catch 
-  - to handle exception
+  - The code to handle exception if it occurs
   - must preceded by Try 
   - can be followed by Finally 
 - Finallly
   - execute the important code even if some issue happen
   - Executed despite exception being handled or not.
-- Throw: throw a exception "show me ... do this ..."
-- Throws: exception declaration "the thing could go wrong in A, B, and C"
-- give you a log of all methods executed success or not: catch (IOException exception)  {exception.printStackTrace();}
+- Throw
+  - It is used to explicitly throw an exception. It can be used to throw a checked or unchecked exception.
+  - throw a exception "show me ... do this ..."
+- Throws
+  - "throws" is a warning sign that tells other parts of the code that a method might cause an exception;
+  - It is used in method signature. It indicates that this method might throw one of the declared exceptions. While calling such methods, we need to handle the exceptions using try-catch block.
+  - exception declaration "the thing could go wrong in A, B, and C"
+  - give you a log of all methods executed success or not: catch (IOException exception)  {exception.printStackTrace();}
+
+Exception Handling:  Throwing Exceptions
+
+### Rethrow Exception
 
 
-what is checked and unchecked exception in simple words
-- checked exception 
-  - The classes which directly inherit Throwable class except RuntimeException
-  - checked at compile time.
-- unchecked exception 
-  - The classes which inherit RuntimeException
-    - ArithmeticException , 
-    - IllegalArgumentException ,
-    - NullPointerException , 
-    - ArrayIndexOutOfBoundsException
-  - Checked at runtime.
 
 
-print start trees in java to narrow down issues
-
-arraylist
-
-collection 
+## 10. COLLECTION 
+### intro
 - is a framework that provides an architecture to store and manipulate a group of objects. 
 - 5 keywords of collection: It can achieve all the operations that you perform on a data including searching , sorting, insertion , manipulation , and deletion
 
-
-Collections Framework
+### Collections Framework
 - list: ordered
 - set: unordered, unique
 - stack: last in first out; only add and remove at the top
 - quene: first in first out
 - map: key and value
+
+![example image](../Web/assignment1/img-courses/level1-compurteressential.jpg)

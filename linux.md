@@ -87,7 +87,7 @@ Manual of a utility: man
 - cat /etc/passwd /etc/fstab
 
 Viewing output
-
+cat
 - more or less: view with scrolling features
 - cat:
 - echo:
@@ -236,66 +236,94 @@ mounting and / root dir
 
 ## 5 User Management
 
-- Add a user
-  - sudo useradd alex -m -d /home/alex -e 2030-12-31 -s /bin/bash
+Verify the current status / newly created accounts
+- tail /etc/passwd
+- check a specific account "chinua"
+  - grep chinua /etc/passwd
+
+View the /etc/shadow file, has expiry date info
+- sudo tail /etc/shadow
+
+list the contents of the home directory, observe the owner and group.
+- ls -l /home
+
+### User Creation
+Add a user 
+- sudo useradd alex -m -d /home/alex -e 2030-12-31 -s /bin/bash
+  - -m create the home directory
   - -d to set directory
   - -e expiry date
-  - -s  The login shell is /bin/bash. If you do not specify this option, Ubuntu’s will use the default login shell
-/bin/sh
-  - -m create the home directory
-- Create a user without creating a default group
-  - sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -N  
-  - -N means no default group
-  - If no group is specified in the command, the user's primary group will be the same as the username by default.
-- create a user buena and associate the her with certain groups.
-  - sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -N -G sudo,badminton,chess
+  - -s If you do not specify this option, Ubuntu’s will use the default login shell /bin/sh
+  - If no group is specified in the command, the user's primary group will be the same as the username by default.user
+  - The users pw shell is stored in the /etc/passwd file.
+
+### create group and create user with group names 
+Create a group: addgroup
+- sudo addgroup archery 
+Delete a group: groupdel
+
+
+- !user's primary group will also be one of the default group; other word, one default group will be the same as the primary group.
+
+Add a user and not specify group 
+- If no group is specified in the command, the user's primary and default group will be the same as the username. 
+
+Add a user without creating a default group using -N
+- -N means primary group will be "users", one of the default group will be "users"
+- sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -N  
+
+Add a user buena and associate her with certain groups.
   - -G specify groups
+  - sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -N -G sudo,badminton,chess
+  - The primary group will be "users", and the default groups will be "users, sudo, badminton, chess"
 
-/etc/passwd
-- Verify the current status / newly created accounts
-  - tail /etc/passwd
-  - check a specific account "chinua"
-    - grep chinua /etc/passwd
-- View the /etc/shadow file, has expiry date info
-  - sudo tail /etc/shadow
+### change user's id and group
 
-user modification
+The administrator wants to change the full name for userid jody0657 to Jody Wilson .
+- sudo usermod -c "Jody Wilson" jody0657
+
+Change user (one to many) DEFAULT groups (archery, sudo and cdrom) using
+- sudo usermod -G archery,sudo,cdrom ariana
+- Note: Do not put a space between the group names.
+- It will change the preset default groups except the group has the same name of Primary group 
+
+Change user's PRIMARY group
+- sudo usermod -g cdrom username
+  
+Temporarily changing a users PRIMARY group
+- newgrp groupname
+
+### Display the user's primary and default groups
+Displaying the DEFAULT group associations for a user account
+- groups (when you are the user)
+- groups boshu
+
+Check the id, primary group and default/supplementory group of a user account 
+- id username
+  - primary group will be listed after the text "gid=" 
+  - default/supplementory group will be listed after the text "groups=".
+
+
+### user modification
+Expirty Date
 - Change the Account Expiry Date for a User 
   - method 1: sudo chage -E 2031-12-31 chris
   - method 2: sudo usermod -e 2031-12-31 chris
-  - Check the expiry date of user chris
-    - sudo tail /etc/shadow | grep chris
-- Adding Comments to a User Account
-  - sudo usermod -c "Chinua Achebe, Nigeria" chinua
-- Deleting a Users Account dimona
-  - userdel -r dimona
-- Adding a password
-  - sudo passwd ariana  
-  - sudo passwd boshu: 19900416
-- Associate user ariana to the groups archery, sudo and cdrom using
-  - sudo usermod -G archery,sudo,cdrom ariana
+    - -e is also used in useradd 
+- Check the expiry date of user chris
+  - sudo tail /etc/shadow | grep 
 
-- Note the default group associations for your account:
-  - groups
-- list the contents of the home directory, observe the owner and group.
-  - ls -l /home
-- Check the id, primary group, and supplementory group of a user
-  - id username
-- Create a group: addgroup
-  - sudo addgroup archery 
-- Associate user ariana to the groups archery, sudo and cdrom 
-  - sudo usermod -G archery,sudo,cdrom ariana
-  - Note: Do not put a space between the group names.
-- Associate user brandon to group badminton
-  - sudo usermod -G badminton brandon
-- Displaying the primary group of a user 
-  - groups boshu
-- Change user's primary group
-  - sudo usermod -g cdrom username
-- Temporarily changing a users primary group
-  - newgrp groupname
+Adding Comments to a User 
+- sudo usermod -c "Chinua Achebe, Nigeria" chinua
 
-Users
+Deleting a Users Account dimona
+- userdel -r dimona
+
+Adding a password
+- sudo passwd ariana  
+- sudo passwd boshu: 19900416
+
+### Users Switch
 - Login in another user
   - su - boshu
 - check your role
@@ -306,10 +334,14 @@ Users
 
 ## 6 Shell Script
 
-- if the shell file is not in $PATH, just type: ./simple.sh to run simple.sh
-- mv simple.sh /home/faculty/bin
-- mv simple.sh /bin
+1. Consideration when writing shell
+- bash is positional, so end of an expression or evaluation must be terminated by a semicolon or a new line
+  - option 1. if [ $balance -eq 0 ]; then
+  - option 2. if [ $balance -eq 0 ]
+  - then
+- space after square brack
 
+- if the shell file is not in $PATH, type: ./simple.sh to run simple.shPA
 - put script in a $PATH so just type the file name will run it
 
 
@@ -350,43 +382,71 @@ the -p option: automatic variable called REPLY
 the -s option: silent option to enter text that is not displayed
 
 Arithmetic Evaluation
-
 - Themost robust and compact syntax uses double parenthesis.
   - (( TotIncome = DivIncome + Income ))
   - (( TotalDeduction = TaxPaid + RRSP ))
   - (( Age = 35 ))
   - c=$(( a + b )) Note: spaces are not allowed before and after the assignment operator.
   - (( c = $((a + b)) )), Note: spaces allowed, redundant syntax, but can be used for a lengthy evaluation. Verify the variable c, by echo $c
+- The line (( g = 0 )) is correct, it is an arithmetic evaluation, variables do not need to be preceded by a $ sign. The $ sign is optional in an arithmetic evaluation.
 
 Using Quotation
+- $()
+  - command evaluation, e.g. $(pwd)
+  - command substitution (save result of a command to a variable), e.g. today=$( date )
+- $((expression)): $ with double brackets. Arithmetic expansion is a way to perform mathematical operations in Bash. The expression inside the double parentheses is evaluated and replaced with the result of the mathematical operation
+- "": double quote 
+  - allow command expansion, e.g. echo "$(pwd)"
+  - allow variable expansion, e.g. echo "$a"
+  - allow arithmetic expansion, e.g. echo "$(( 1 + 2 ))" 
+- '': single quote: prevent expansion, will literally print what inside, except another pair of single quote inside
+- backquote ``: command substitution, e.g. today=`date`
+
+Using Quotation and $(), (())Examples
 - echo pwd: This will simply print the string "pwd" on the terminal. It does not execute the pwd command to print the current working directory.
-
-- echo $pwd: This will print the value of the environment variable $pwd if it is set. If $pwd is not set, it will print an empty string.
-
-- echo $(pwd): This will execute the pwd command to print the current working directory, and then print the output on the terminal.
-
+- echo $pwd: It will print a empty string if not set pwd as a environment variable. This will print the value of the environment variable $pwd if it is set.
 - echo "$((pwd))": This will attempt to perform arithmetic evaluation on the string "pwd", but since "pwd" is not a numeric value, it will produce an error.
-
-- echo '$(pwd)': This will print the literal string $(pwd) on the terminal without executing the pwd command.
-
+- echo '$(pwd)': This will print the literal string $(pwd) on the terminal without executing the pwd command. 
+- echo $(pwd): This will execute the pwd command to print the current working directory, and then print the output on the terminal.
 - echo "$(pwd)": This will execute the pwd command to print the current working directory, and then print the output on the terminal. The $() syntax is used to execute a command and capture its output.
+- echo 1+1: 1+1
+- echo 1 + 1: 1 + 1
+- echo "1+1": 1+1
+- echo '$(1+1)':$(1+1)
+- echo '$((1+3))': $((1+3))
 
-- echo `1+3`:
-- echo $pwd:
-- echo"$((1+3))":
-- echo '$(1+3)':
-echo "$(1+3)"
-- echo `1+3`:
+- echo ((1+1)): syntax error
+- echo $(1+1): command not found
 
+- echo "$((1+3))": 4
+- echo $((1+1)): 2
 
-- $?: This variable contains the exit status of the last executed command. The exit status is an integer value between 0 and 255 that indicates whether the command succeeded or failed. A value of 0 indicates success, while any other value indicates an error.
-- $0: This variable contains the name of the currently running shell or script. For example, "myscript.sh".
-- $#: This variable contains the number of arguments passed to a script or function. For example, if you run a script with the command "myscript.sh arg1 arg2 arg3", $# would contain the value "3".
+- echo "$(1+1)": command not found
+- echo `1+1`:command not found
+- echo `$((1+1))`: 2: command not found;
+built-in variables
+- env: display environment variables 
+- ps -u: display all running process 
+- echo $$: identiy the curent process ID
+- echo $PPID: identify the process ID of the parent process
+- echo $PS1: display the first command line prompt.
+- echo $?: This variable contains the exit status of the last executed command. The exit status is an integer value between 0 and 255 that indicates whether the command succeeded or failed. A value of 0 indicates success, while any other value indicates an error.
+- echo $0: This variable contains the name of the currently running shell or script. For example, "myscript.sh".
+- echo $#: This variable contains the number of arguments passed to a script or function. For example, if you run a script with the command "myscript.sh arg1 arg2 arg3", $# would contain the value "3".
 
+Process
+- Run a script in the back ground, type: myscript.sh &
 
 ## 12 Array 
 
-Declaring an Array
-- orchid=(brassavola brassia cattleya cymbidium dendrobium encyclia laelia masdevallia
-miltonia odontoglossum oncidium paphiopedilum phalaenopsis)
+1. Declaring an Array
+- zero based index
+- use space to seperate elements by default
+- orchid=(brassavola brassia cattleya cymbidium dendrobium encyclia  laelia masdevallia miltonia odontoglossum oncidium paphiopedilum phalaenopsis)
 
+2. access an array
+- Elements of an array can be accessed using the syntax: echo ${orchid[0]}
+
+3. length of an array and length of an element in an array
+- The command echo ${#orchid[*]} will display the total number of elements in the array, i.e., 13.
+-The length of 2nd element in the array is given by: echo ${#orchid[1]}
