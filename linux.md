@@ -450,3 +450,94 @@ Process
 3. length of an array and length of an element in an array
 - The command echo ${#orchid[*]} will display the total number of elements in the array, i.e., 13.
 -The length of 2nd element in the array is given by: echo ${#orchid[1]}
+
+
+## Final Prep
+
+2. Basic Linux commands
+(a) home directory for root, home directory of user
+(b) Absolute path, relative path
+(c) Change Directory. cd .., cd ../..
+(d) Rename file using mv
+(e) Remove file using rm
+(f) Remove non empty directory using rm
+(g) Remove empty directory using rmdir
+(h) Display inode number using ls -i
+(i) present (current) working directory using pwd
+(j) create empty file using touch, change date and time stamp using touch.
+(k) parameter expansion using braces f g, example: mkdir -p flecture,labg, combined with cp, mv,
+rm, touch. How many directories and files are created? Review Test question.
+(l) command history $HISTSIZE, $HISTFILE, clearing history
+(m) grep, cut, cat
+(n) whoami, passwd, uname, su
+(o) difference between cat /etc/shells, echo $SHELLS
+(p) POSIX, Portable Operating System, an IEEE Standard.
+
+3. File permission
+(a) chmod, rwx, owner (user), group and other
+(b) chown, chgrp.
+(c) gpasswd, groupadd, useradd, usermod, userdel
+(d) newgrp, login to new group
+(e) hard links, soft links
+(f) redirection,
+// > >> 1> 2> &> <
+stdout, stdin, stderr
+
+(g) do not confuse between the default symbol for PS2 and redirection symbol
+(h) There are four prompts PS1, PS2, PS3 and PS4. Differentiate between PS1 and PS2. PS3 and PS4 are
+not covered in this course.
+4. File System
+(a) fdisk -l /dev/sdb, Review test question. Partitions, Logical drives, physical drives, extended
+drives, space on disk.
+(b) Logial memory, physical memory, virtual memory
+(c) swap space on HDD
+5. Os concept 
+(a) difference between program and process
+n Linux, a program is an executable file that resides on the hard disk and contains instructions that the computer can follow to perform a task. When a program is launched, it becomes a process, which is an instance of the program running in memory. The process contains information about the program's state, such as the current instruction being executed, the values of any variables used by the program, and the program's input and output streams. Multiple processes can be running concurrently, allowing the computer to perform multiple tasks at the same time.
+
+In summary, a program is a file containing executable code, while a process is an instance of that program running in memory, with its own state and system resources.
+
+(b) context switching, process scheduling
+
+(c) preemption
+In Linux, preemption refers to the ability of the kernel to interrupt a running process in order to execute another process that has a higher priority.
+
+(d) interprocess communication models. Message passing and shared memory. Which ones can be used
+by processes on:
+• the same computer
+• different computers
+
+(e) PPID, PID of init and its child processes. init has PID as 1
+- 
+(f) init is being replaced by systemd in Linux
+
+
+(g) foreground and background processes fg, bg
+
+
+6. Shell Scripts and Functions
+(a) declaring arrays, assigning variables, using arrays in scripts
+(b) echo individual elements in an array
+(c) starting a background process using &
+
+(d) export
+In Bash shell, the export command is used to make a variable or function available to child processes of the current shell. When a variable is exported using the export command, it becomes an environment variable, which means it can be accessed by any process or program running in the current shell session.
+
+type: export VARIABLE_NAME=value
+
+
+(e) Special Variables. $$, $?, $#?
+(f) exporting variables
+(g) positional parameters
+(h) Functions, review scripts and class notes on Functions
+(i) loops using for, while, for x in f1..11..2g, for y in f1..10..3g
+(j) (( )), $(( ))
+(k) case statements
+(l) vim
+(m) test 5 -eq 5 is the same as [ 5 -eq 5 ]
+
+
+Others
+- #!/bin/bash is not the same as #! /bin/bash
+- to check unassigned variables before running a shell script, type: bash shellScriptFile.sh 
+

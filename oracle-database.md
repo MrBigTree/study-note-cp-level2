@@ -30,21 +30,20 @@
 - logical database objects
 
 
-SQL> desc table_name 
+summary of a table 
+- SQL> desc table_name 
 
 SET SERVEROUTPUT ON // by default no output shown in cmd
 
-ed // open the last sql script you inputed
 
 := // assign a variable in pl/sql
 
 
 trigger: timing, event, object
 
-run cmd as admin so you can see the texteditor 
-
+debug your sql in command line
+- run cmd as admin so you can see the texteditor 
+- type: ed // open the last sql script you inputed
+- type: show error
 
 /
-show error
-
-desc my_pack

@@ -211,16 +211,24 @@ Think it through
 - Exception handling provides a single uniform technique for documenting , detecting and recovering from errors.
 - Better to incorporate exception handling and error recovery strategy from the BEGINNING of your design process than at the end of implementation.
 
+Exception Handling - Throwing Exceptions
+1. detect an error
+2. throw an exception object to signal an exceptional condition
+3. method terminates immediately
+4. execution continues with an exception handler  
+
+![example image](./exception-hirachi.png)
+
+
 Types of Exception
 - user-defined exception
 - built-in Exception
-  - checked exception 
-    - The classes which directly inherit Throwable class except RuntimeException: IOException and ClassNotFoundException
-    - If some code within a method throws a checked exception, then the method must either handle the exception or it must specify the exception using the throws keyword in method signature.
-    - Checked exceptions are due to external circumstances that the programmer cannot prevent (no matter how careful you are: disk error, broken network connection)
-    - The compiler checks that your program handles these exceptions.
-    - Program will not compile if no indication of how to handle checked exceptions
-  - unchecked exception: 
+  - CHECKED exception 
+    - The classes (IOException and ClassNotFoundException) which directly inherit Throwable class except RuntimeException.
+    - external reason that the programmer cannot prevent (no matter how careful you are: disk error, broken network connection).
+      - The compiler checks that your program handles these exceptions.
+      - Program will NOT compile if no indication of how to handle checked exceptions.
+  - UNCHECKED exception: 
     - programmer’s fault
     - not checked at compile time so compiler doesn't check whether progrmmer has handled them or not. 
     - The classes which inherit RuntimeException
@@ -230,7 +238,7 @@ Types of Exception
       - ArrayIndexOutOfBoundsException
 
 Errors
-- doesn’t occur due to bad data entered by user
+- doesn’t occur due to bad data entered by user.
 - indicates a system failure, disk crash or resource unavailability
 - Error is irrecoverable: not in the scope of a programmer to handle. 
   - OutOfMemoryError, VirtualMachineError, AssertionError etc.
@@ -238,6 +246,39 @@ Errors
 Difference between error and exception
 - Errors 1. something went wrong which is not in the scope of a programmer to handle. 2. the error doesn’t occur due to bad data entered by user rather it indicates a system failure, disk crash or resource unavailability.
 - Exceptions are events that occurs during runtime due to BAD DATA entered 
+
+throws
+- handle the checked exception in the same method that throws i to satisfy the compiler 
+- tell the comiler you are aware of the exception
+- you want the method to terminate if the exception occurs
+- add a throws clause to the method header
+- If some code within a method throws a checked exception, then the method must either handle the exception or it must specify the exception using the throws keyword in method signature.
+  - public void readData(String filename) throws FileNotFoundException
+
+Throws Clause 
+- The throws clause signals to the caller of your method that it may encounter a IOException
+- NOTE : Java provides exception facility such that: some methods can detect, some methods can handle, and other methods just pass them along.
+- Throw early, catch late
+- syntax: public void readData(String filename) throws FileNotFoundException
+  - you may specify all checked exceptions that this method may throw
+  - you may also liste unchecked exceptions
+
+Catching Exceptions
+- place the statements that can cause an exception in the try block and the handler inside a catch clause
+- produce a printout of the chain of method calls that led to the exception by calling: exception.printStackTrace();
+- 
+
+Closing Resources
+- try with resources
+- trt(PrintWriter out = new PrintWriter(filename)) {
+    writeData(out);
+  } // out.close() is always called
+
+try-with-resources: auto resource deallocation
+- Typically resource release code should be placed in a finally block to ensure that a esource is released , regardless of whether there were exceptions when the resource was used in the corresponding try block.
+- An alternative notation the try with resources statement simplifies writing code in which you
+obtain one or more resources, use them in a try block and release them in a corresponding finally block.
+
 
 ### Frequently used terms in Exception handling 
 - Try 
@@ -260,8 +301,6 @@ Difference between error and exception
   - exception declaration "the thing could go wrong in A, B, and C"
   - give you a log of all methods executed success or not: catch (IOException exception)  {exception.printStackTrace();}
 
-Exception Handling:  Throwing Exceptions
-
 ### Rethrow Exception
 
 
@@ -279,4 +318,4 @@ Exception Handling:  Throwing Exceptions
 - quene: first in first out
 - map: key and value
 
-![example image](../Web/assignment1/img-courses/level1-compurteressential.jpg)
+![example image](./exception-hirachi.png)
