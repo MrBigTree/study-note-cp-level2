@@ -352,7 +352,6 @@ Rethrow an Exception
 - Rethrow by using the throw keyword , followed by a reference to the exception object that was just caught.
 
 
-
 ## 10. COLLECTION 
 ### intro
 - is a framework that provides an architecture to STORE and MANIPULATE a group of objects. 
@@ -362,52 +361,44 @@ Rethrow an Exception
 Most common collections 
 - List: ordered
   - ArrayList
-  - Stack: 
+  - Stack: last in first out (like a stack of books); only add and remove at the top
   - LinkedList
-- Queue:
 - Set: unordered, unique
-- map: key and value
-  - HashMap
-  - TreeMap
+- Map 
+  - Keeps associations between key and value objects
+  - every key in the map has an associated value
+  - the map stores the KEYS, VALUES, and the ASSOCIATIONS between them 
+  - e.g., HashMap and TreeMap
+- Queue:
+  - first in first out (like a line of people waiting at SuzieQ)
+  - a priority queue
+    - unordered collection
+    - efficient REMOVING the element with the highest priority
 
-Collection interface 
+
+### Collection interface 
   - at the root
   - all collection classes implement this interface 
+- List interface 
+  - remember the order of its elements
+  - two implementing classes: ArrayList, LinkedList
+- Set interface 
+  - unordered of unique elements
+  - arranges its elements so that FINDING, ADDING, and REMOVING elements is more efficient 
+  - two mechanisms to do this: hash tables, binary search trees
 
-A collections framework is an architecture for representing and manipulating collections. All collections frameworks contain:
-  - Interfaces
-  - implementation classes: data structures that can be reused 
-  - algorithms: methods for computations 
+### A collections framework
+- is an architecture for representing and manipulating collections. All collections frameworks contain:
+- Interfaces
+- implementation classes: data structures that can be reused 
+- algorithms: methods for computations 
 
-Advantages
+### Advantages
 - API consistency: the API has a set of interfaces like Collection, Set, List, or Map
 - reduce programming efforts: programmers can focus on use Collection instead of DESIGN Collection
 - ENhances the speed and quality of programs: provides high-performance implementations of data structures and algorithms 
 
-List interface 
-- remember the order of its elements
-- two implementing classes: ArrayList, LinkedList
-
-Set interface 
-- unordered of unique elements
-- arranges its elements so that FINDING, ADDING, and REMOVING elements is more efficient 
-- two mechanisms to do this: hash tables, binary search trees
-
-Stack
-- last in first out (like a stack of books); only add and remove at the top
-
-Queue
-- first in first out (like a line of people waiting at SuzieQ)
-- a priority queue
-  - unordered collection
-  - efficient REMOVING the element with the highest priority
-
-Map 
-- Keeps associations between key and value objects
-- every key in the map has an associated value
-- the map stores the KEYS, VALUES, and the ASSOCIATIONS between them 
-
-Collection Methods
+### Collection Methods
 - every class implements Collection interface has these methods
 - sort
 - binarySearch
@@ -416,12 +407,248 @@ Collection Methods
 - fill 
 - copy 
 
-LinkedList
+### ArrayList 
+---
+```
+// Create a new ArrayList with some elements
+ArrayList<String> list = new ArrayList<>();
+list.add("Apple");
+list.add("Banana");
+list.add("Cherry");
+
+// Get an Iterator object for the list
+Iterator<String> it = list.iterator();
+
+// Iterate over the list and print each element
+while (it.hasNext()) {
+    String element = it.next();
+    System.out.println(element);
+}
+```
+
+- ArrayList vs LinkedList
+  - Internal data structure: ArrayList stores its elements in a dynamically resizing array, while LinkedList stores its elements in a doubly linked list data structure.
+  - In general, if you need fast random access to elements and do not need to frequently insert or delete elements in the middle of the list, ArrayList is a better choice. If you frequently insert or delete elements in the middle of the list and do not need fast random access, LinkedList may be a better choice.
+
+### LinkedList
 - used for collecting a sequence of objects
-  - Allows efficient addition and removal of elements in the middle of the sequence
 - A linked list consists of a number of nodes
   - Each node has a reference to the next node.
   - A node is an object that stores an element and references to the neighboring nodes.
 - Adding and removing elements in the middle of a linked list is efficient.
 - Visiting the elements of a linked list in sequential order is efficient.
 - Random access is not efficient.
+```
+// Create a new LinkedList of strings
+LinkedList<String> list = new LinkedList<>();
+
+// Add some elements to the list
+list.add("Apple");
+list.add("Banana");
+list.add("Cherry");
+
+// Get the first element in the list
+String first = list.getFirst();
+System.out.println("First element: " + first);
+
+// Get the last element in the list
+String last = list.getLast();
+System.out.println("Last element: " + last);
+
+list.removeFirst();// Remove the first element from the list
+list.removeLast();// Remove the last element from the list
+
+// Print the remaining elements in the list
+System.out.println("Remaining elements: ");
+for (String element : list) {
+  System.out.println(element);
+}
+```
+
+### List Iterator
+- Use a list iterator to ACCESS elements inside a LINKEDLIST.
+- Encapsulates a position anywhere inside the linked list.
+- Think of an iterator as pointing between two elements: Analogy: like the cursor in a word processor points between two characters
+- To get a list iterator, use the listIterator method of the
+LinkedList class.
+- a generic type: a type that can be parameterized with one or more type parameters. For example, the ArrayList and ListIterator class in Java is a generic class
+```
+ArrayList<String> list = new ArrayList<String>();
+```
+- Initially points before the first element.
+- The nodes of the LinkedList class store two links
+  - To move the list position backwards, use: hasPrevious() and previous()
+  - To move the list position forwards, use: hasNext() and next()
+- The add() method adds an object after the iterator. Then moves the iterator position past the new element.
+- remove()
+  - remove the last element returned by next() or previous()
+  - You cannot call it immediately after a call to add
+  - can be called only once after calling next or previous
+---
+```
+// create a LinkedList 
+LinkedList<String> employeeNames = . . .;
+
+// create a list iterator
+ListIterator<String> it = employeeNames.listIterator;
+
+if(it.hasNext()){
+  it.next(); // Move the position with next method. next() returns the element that the iterator is passing. The return type of the next method matches the list iterator's type parameter.
+}
+
+// To traverse all elements in a linked list of strings:
+while(it.hasNext()){
+  String name = it.next();
+  // Do something with name
+  System.out.println(name);
+}
+
+// To use the “for each” loop:
+for (String name : employeeNames){
+  // Do something with name
+    System.out.println(name);
+}
+
+// To remove all names that fulfill a certain condition:
+while(it.hasNext()){
+  String name = it.next();
+  if (condition is fulfilled for name)
+    it.remove();
+}
+```
+
+---
+
+### Sets
+- You cannot add an element to a set at an iterator position. A set is unordered.
+- You can remove an element at an iterator position.
+- The iterator interface as no previous method.
+
+### HashSet 
+- A set organizes its values in an order that is optimized
+for efficiency.
+  - Inserting and removing elements is more efficient with a set than with a list.
+  - A Set implementation arranges the elements so that it can locate them quickly.
+- The Set interface has the same methods as the Collection interface.
+- A set does not admit duplicates
+- May not be the order in which you add elements.
+- Two implementing classes: 
+  - HashSet based on hash table
+  - TreeSet based on binary search tree
+- Elements in a hash table must implement the method hashCode
+- Must have a properly defined equals method.
+- You can form hash sets holding objects of type String ,
+Integer , Double , Point , Rectangle , or Color
+- in a hash table , objects with the same hash code are placed in the same group
+
+- HashSet vs HashMap
+  - type of data they store. HashSet stores a collection of unique elements, while HashMap stores key-value pairs. 
+
+- Set vs List
+  - Duplicates: A List allows duplicate elements, while a Set does not. 
+  - Ordering: A List preserves the order of its elements, while a Set does not guarantee any specific order of its elements. However, some implementations of Set, such as LinkedHashSet, do maintain the insertion order of elements. 
+  - Access and retrieval: A List allows elements to be accessed and retrieved by their index position, while a Set does not provide this capability. In a Set, elements are retrieved using their values.
+
+
+### TreeSet
+- sorted order, but still unordered
+- elements stored in nodes
+- The nodes are arranged in a tree shape
+- You can form tree sets for any class that implements the
+Comparable interface, like String or Integer. 
+
+- TreeSet vs HashSet: Use a TreeSet if you want to visit the set's elements in sorted order.  Otherwise choose a HashSet
+
+
+---
+
+### Map
+- Use a map when you want to look up objects by using a key
+- associate a key SET with a value collection
+  - Why is the collection of the values of a map not a set? Value may duplicate.
+  - Why is the collection of the keys of a map a set and not a list? The ordering does not matter, and you cannot have duplicates.
+- Use the put method to add an association
+- You can change the value of an existing association by calling put again
+- The get method returns the value associated with a key:
+- To remove an association, call the remove method with the key
+- Set vs Map
+  - Set stores a collection of unique elements, while Map stores association between keys and values. 
+
+
+### HashMap
+- key-value pair
+- need to define the data type of key and value
+- no order, rely on the key and value to access a data
+- you can put millions of variable and their value in a HashMap
+- HashMap<String, Integer> hashMapObj = new HashMap<String, Integer>();
+- hashMapObj.put(): add data to your hashMapObj
+
+```
+// Create a new HashMap with String keys and Integer values
+HashMap<String, Integer> map = new HashMap<>();
+
+// Add some key-value pairs to the map
+map.put("Alice", 25);
+map.put("Bob", 30);
+map.put("Charlie", 35);
+
+// Get the value associated with a key
+int age = map.get("Bob");
+System.out.println("Bob's age is " + age);
+
+// Check if a key is present in the map
+boolean hasAlice = map.containsKey("Alice");
+System.out.println("The map has Alice: " + hasAlice);
+
+// Iterate over the key-value pairs in the map
+for (String key : map.keySet()) {
+    int value = map.get(key);
+    System.out.println(key + " is " + value + " years old");
+}
+```
+
+### Queue
+- add to the tail, remove from the head: FIFO
+- peek method to get the head element of the queue without
+removing it.
+- The LinkedList class implements the Queue interface.
+- When you need a queue, initialize a Queue variable with a LinkedList object:
+```
+Queue<String> q =  new LinkedList<>();
+q.add("A"); q.add("B"); q.add("C");
+while (q.size() > 0) { System.out.print(q.remove() + " "); } // Prints A B C
+```
+
+### Priority Queue
+- A priority queue collects elements , each of which has a priority.
+  - Example: a collection of work requests, some of which may be more urgent than others.
+- Does not maintain a FIFO discipline.
+- Elements are retrieved according to their priority.
+- Priority 1 denotes the most urgent priority.
+- When you retrieve an item from a priority queue, you always get the most urgent one.
+
+#### TIT 
+- Why would you want to declare a variable as below instead of simply declaring it as a linked list? Answer: This way, we can ensure that only queue operations can be invoked on the q object.
+```
+Queue<String> q = new LinkedList<>();
+```
+- Why wouldn't you want to use an array list for implementing a queue? Answer: Depending on whether you consider the 0 position the head or the tail of the queue, you would either add or remove elements at that position. Both are inefficient operations because all other elements need to be moved.
+
+
+
+### Stack
+
+When you need a queue, initialize a Queue variable with a
+LinkedList object:
+
+### Choosing a Collection
+- Determine how you access the values.
+- Determine the element types or key/value types.
+- Determine whether element or key order matters.
+- For a collection, determine which operations must be
+efficient.
+- For hash sets and maps , decide whether you need to
+implement the hashCode and methods
+- equals
+- If you use a tree, decide whether to supply a comparator.
+
