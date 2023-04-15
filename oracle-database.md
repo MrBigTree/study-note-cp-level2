@@ -46,4 +46,4 @@ debug your sql in command line
 - type: ed // open the last sql script you inputed
 - type: show error
 
-/
+

@@ -1,9 +1,46 @@
 # Linux Note
 
-Intro
+## OS concept
 
-- Author: Yunyi Li
-- This is to take notes for Level2 Linux course and practice VIM and markdown.
+### difference between program and process
+A process is an instance of a program that is running. 
+A program is a set of instructions residing on a storage medium —it is passive. After a program is loaded inmain memory (RAM), it consumes
+CPU cycles it becomes — it is active. A program starts as a process. While running a process may spawn other processes. Code to spawn other processes is written within the parent process. The spawned process runs as a child process. Alternatively, a process can invoke other programs residing on the storage medium.
+
+- Program:
+  - A set of instructions or code stored on disk as an executable file
+  - Passive entity that can be launched into a process
+  - Can be executed multiple times, creating multiple processes
+- Process:
+  - Running instance of a program in memory. 
+  - Active entity with its own state, memory, and system resources (e.g., CPU, I/O, network). 
+  - Created by the operating system when a program is launched, runs independently of other processes. 
+  - Has a unique process ID (PID) that identifies it to the operating system and other processes.
+
+### kernel
+- The kernel is the core component of the operating system that manages hardware and software resources, and provides a platform for applications to run on.
+- The kernel is responsible for memory management, device management, process management, and security management.
+- In Linux, the kernel is a monolithic kernel that contains all essential components of the operating system.
+- The kernel's performance and functionality have a direct impact on the system's stability, reliability, and security.
+
+### context switching, process scheduling
+- The CPU switches its time between each process rapidly giving the impression that each process is getting the CPU’s attention all the time.
+- A process is often referred to as a task  
+
+### preemption
+
+In Linux, preemption refers to the ability of the kernel to interrupt a running process in order to execute another process that has a higher priority.
+
+### interprocess communication models. Message passing and shared memory. Which ones can be used
+by processes on:
+• the same computer
+• different computers
+
+### PPID, PID of init and its child processes. init has PID as 1
+
+### init is being replaced by systemd in Linux
+
+### foreground and background processes fg, bg
 
 ## 2 Basic Command
 
@@ -88,6 +125,7 @@ Manual of a utility: man
 
 Viewing output
 cat
+
 - more or less: view with scrolling features
 - cat:
 - echo:
@@ -105,7 +143,25 @@ cat
   - pwd 2>> error.log
 - redirect standard output
   - append to existing or create new file if not exist >>
-  - create a new if not exist or replace existing content >
+  - create a new if not exist or replace existing content > or 1>
+
+```
+// { statement1 ; statement2 ; } all the output will be redirected into the same place
+{ echo hello ; echo bye ; } >1.txt // need space before } and after {;
+cat 1.txt
+
+( statement )
+
+	The statement/command will run inside a
+	sub-shell
+
+	e.g.
+		$ ( z=3 )
+		$ echo $z    # the variable z is not
+				declared in the current
+				shell
+		$
+```
 
 12. Querying the Commands
 
@@ -237,18 +293,23 @@ mounting and / root dir
 ## 5 User Management
 
 Verify the current status / newly created accounts
+
 - tail /etc/passwd
 - check a specific account "chinua"
   - grep chinua /etc/passwd
 
 View the /etc/shadow file, has expiry date info
+
 - sudo tail /etc/shadow
 
 list the contents of the home directory, observe the owner and group.
+
 - ls -l /home
 
 ### User Creation
-Add a user 
+
+Add a user
+
 - sudo useradd alex -m -d /home/alex -e 2030-12-31 -s /bin/bash
   - -m create the home directory
   - -d to set directory
@@ -257,298 +318,369 @@ Add a user
   - If no group is specified in the command, the user's primary group will be the same as the username by default.user
   - The users pw shell is stored in the /etc/passwd file.
 
-### create group and create user with group names 
-Create a group: addgroup
-- sudo addgroup archery 
-Delete a group: groupdel
+### create group and create user with group names
 
+Create a group: addgroup
+
+- sudo addgroup archery
+  Delete a group: groupdel
 
 - !user's primary group will also be one of the default group; other word, one default group will be the same as the primary group.
 
-Add a user and not specify group 
-- If no group is specified in the command, the user's primary and default group will be the same as the username. 
+Add a user and not specify group
+
+- If no group is specified in the command, the user's primary and default group will be the same as the username.
 
 Add a user without creating a default group using -N
+
 - -N means primary group will be "users", one of the default group will be "users"
-- sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -N  
+- sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -N
 
 Add a user buena and associate her with certain groups.
-  - -G specify groups
-  - sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -N -G sudo,badminton,chess
-  - The primary group will be "users", and the default groups will be "users, sudo, badminton, chess"
+
+- -G specify groups
+- sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -N -G sudo,badminton,chess
+- The primary group will be "users", and the default groups will be "users, sudo, badminton, chess"
 
 ### change user's id and group
 
 The administrator wants to change the full name for userid jody0657 to Jody Wilson .
+
 - sudo usermod -c "Jody Wilson" jody0657
 
 Change user (one to many) DEFAULT groups (archery, sudo and cdrom) using
+
 - sudo usermod -G archery,sudo,cdrom ariana
 - Note: Do not put a space between the group names.
-- It will change the preset default groups except the group has the same name of Primary group 
+- It will change the preset default groups except the group has the same name of Primary group
 
 Change user's PRIMARY group
+
 - sudo usermod -g cdrom username
-  
+
 Temporarily changing a users PRIMARY group
+
 - newgrp groupname
 
 ### Display the user's primary and default groups
+
 Displaying the DEFAULT group associations for a user account
+
 - groups (when you are the user)
 - groups boshu
 
-Check the id, primary group and default/supplementory group of a user account 
+Check the id, primary group and default/supplementory group of a user account
+
 - id username
-  - primary group will be listed after the text "gid=" 
+  - primary group will be listed after the text "gid="
   - default/supplementory group will be listed after the text "groups=".
 
-
 ### user modification
+
 Expirty Date
-- Change the Account Expiry Date for a User 
+
+- Change the Account Expiry Date for a User
   - method 1: sudo chage -E 2031-12-31 chris
   - method 2: sudo usermod -e 2031-12-31 chris
-    - -e is also used in useradd 
+    - -e is also used in useradd
 - Check the expiry date of user chris
-  - sudo tail /etc/shadow | grep 
+  - sudo tail /etc/shadow | grep
 
-Adding Comments to a User 
+Adding Comments to a User
+
 - sudo usermod -c "Chinua Achebe, Nigeria" chinua
 
 Deleting a Users Account dimona
+
 - userdel -r dimona
 
 Adding a password
-- sudo passwd ariana  
+
+- sudo passwd ariana
 - sudo passwd boshu: 19900416
 
 ### Users Switch
-- Login in another user
-  - su - boshu
-- check your role
-  - whoami
-- Exit so you return as a regular user
-  - exit
 
+- Login in another user `su - boshu`
+- check your role `whoami`
+- Exit so you return as a regular user `exit`
 
 ## 6 Shell Script
 
-1. Consideration when writing shell
+### 6.1. Consideration when writing shell
+
 - bash is positional, so end of an expression or evaluation must be terminated by a semicolon or a new line
   - option 1. if [ $balance -eq 0 ]; then
   - option 2. if [ $balance -eq 0 ]
   - then
 - space after square brack
-
 - if the shell file is not in $PATH, type: ./simple.sh to run simple.shPA
 - put script in a $PATH so just type the file name will run it
 
+### 6.2 `(())` vs `$()` vs `$(())` vs `""` vs `''` vs ` `` `;
 
-echo
+`((arithmetic evaluation))`
 
-- echo "Which is the best college in Ontario?"
-- echo $(date)
-- echo "Today is :" + $( date +"%A" ) > DayOfWeek
-- echo b\*.sh: list all filenames that begin with b and end in .sh.
-- echo "$(ls -l log.03052015 | cut -d" " -f4)": -d is the delimiter and -f4 means the 4th field 
-read
+- arithmetic evaluation. The most robust and compact syntax uses double parenthesis.
 
-- echo "Enter your test 1 grade:"; read test1Grade
-- read -p "Enter your test 1 grade:" test1Grade
-- echo $test1Grade
+```
+# The $ sign is optional in an arithmetic
+(( TotIncome = DivIncome + Income ))
+(( TotalDeduction = TaxPaid + RRSP ))
+(( Age = 35 )) evaluation.
 
-Interpreting Backslash with -e
+c=$(( a + b )) # Note: spaces are not allowed before and after the assignment operator.
 
-- Using the -e option in echo.
+(( c = $((a + b)) )) # Note: spaces allowed, redundant syntax, but can be used for a lengthy evaluation. Verify the variable c, by echo $c
+
+echo ((1+1))  // syntax error
+((a=1+1));echo $a // no syntax error
+```
+
+`$()`
+
+- command evaluation, e.g. $(pwd)
+- command substitution (save result of a command to a variable), e.g. today=$( date )
+
+```
+echo $(1+1) // command not found
+echo $(pwd) // /home/li000795
+```
+
+- $((expression))
+- Arithmetic expansion inside the double parentheses is evaluated and replaced with the result of the mathematical operation
+
+```
+echo "$((pwd))" // can not perform arithmetic evaluation, error.
+echo $((1+1)) //  2
+```
+
+"": double quote
+
+```
+// allow command expansion for $ with single bracket
+echo "$(pwd)"
+echo "$(1+1)" // command not found
+
+//allow variable expansion  for $ with single bracket
+echo "$a"
+
+//allow arithmetic expansion  for $ with double bracket
+echo "$(( 1 + 2 ))" // 3
+echo "$((1+3))" // 4
+
+//if not $ inside "", just print as string
+echo "1+1" // 1+1
+```
+
+' ': single quote: prevent expansion, will literally print what inside, except another pair of single quote inside
+
+```
+echo '$(1+1)' // $(1+1)
+echo '$((1+3))' // $((1+3))
+echo '$(pwd)'  // $(pwd)
+```
+
+backquote ``: command substitution, e.g. ` today=`date` `
+
+```
+echo `1+1` //command not found
+echo `$((1+1))` // 2: command not found;
+```
+
+### 6.3 condition, case, if-else
+
+- test 5 -eq 5 is the same as [ 5 -eq 5 ]
+
+```
+#!/bin/bash
+
+// Using case statement
+echo "Enter a color (red, blue, or green):"
+read color
+
+case $color in
+    red)
+        echo "You chose red."
+        ;;
+    blue)
+        echo "You chose blue."
+        ;;
+    green)
+        echo "You chose green."
+        ;;
+    *)
+        echo "Invalid color."
+        ;;
+esac
+
+// Using if-else statement
+echo "Enter a number (1, 2, or 3):"
+read num
+
+if [ $num -eq 1 ]
+then
+    echo "You chose 1."
+elif [ $num -eq 2 ]
+then
+    echo "You chose 2."
+elif [ $num -eq 3 ]
+then
+    echo "You chose 3."
+else
+    echo "Invalid number."
+fi
+```
+
+### 6.4 loops
+
+```
+// for loop
+for ((x = 0; x < 15; ++x))
+	echo "$x"
+done
+
+// for, enhanced loop
+for i in {1..5}
+do
+  echo "Iteration $i"
+done
+
+// for x in {1..11..2} loop:
+for i in {1..11..2}
+do
+  echo "Iteration $i"
+done
+
+// while loop
+i=1
+while [ $i -le 5 ]
+do
+  echo "Iteration $i"
+  i=$((i+1)) // equivalant to (( i = i+1 ))
+done
+
+```
+
+### 6.5 Process
+
+- `myscript.sh &` // starting a script in the back ground, type:
+- `env` // display environment variables
+- `ps -u` // display all running process
+- `echo $$` // identiy the curent process ID
+- `echo $PPID` // identify the process ID of the parent process
+
+- `echo $PS1` // display the first command line prompt.
+- `echo $?` // This variable contains the exit status of the last executed command. The exit status is an integer value between 0 and 255 that indicates whether the command succeeded or failed. A value of 0 indicates success, while any other value indicates an error.
+- `echo $0` // This variable contains the name of the currently running shell or script. For example, "myscript.sh".
+- `echo $#` // This variable contains the number of arguments passed to a script or function. For example, if you run a script with the command "myscript.sh arg1 arg2 arg3", $# would contain the value "3".
+
+### 6.6 exporting variables
+
+- In Bash scripting, you can use the export command to create environment variables. An environment variable is a variable that can be accessed by any process that is spawned from the current shell.
+
+```
+myvar="Hello, world!"
+export myvar
+env | grep myvar // it will confirm myvar is in the list of all environmental variables
+```
+
+### 6.7 positional parameters
+```
+echo "inputs:" $@
+echo "total number of inputs with $#:" $#
+
+shift 1
+echo "inputs after shift 1:" $@
+```
+
+### 6.8 echo
+
+```
+echo "Which is the best college in Ontario?"
+echo $(date)
+echo "Today is :" + $( date +"%A" ) > DayOfWeek
+
+// list all filenames that begin with b and end in .sh.
+echo b\*.sh:
+
+// -d is the delimiter and -f4 means the 4th field
+echo "$(ls -l log.03052015 | cut -d" " -f4)"
+
+// read
+echo "Enter your test 1 grade:"; read test1Grade
+
+// read -p
+read -p "Enter your test 1 grade:" test1Grade
+echo $test1Grade
+
+// Interpreting Backslash with -e
 - echo -e "\n": get a new line
 - echo -e "\a":
 
-Suppress the trailing newline with -n
-
+// Suppress the trailing newline with -n
 - echo "This month is :" $( date +"%B" )
 - echo -n "This month is :" $( date +"%B" )
 
-Get User Input with read
-
+// Get User Input with read
 - echo "What month is this?"; read this_month
 - echo $this_month
 
-the -p option: automatic variable called REPLY
-
+// the -p option: automatic variable called REPLY
 - read -p "What month is this?"
 - echo $REPLY
 
-the -s option: silent option to enter text that is not displayed
+// the -s option: silent option to enter text that is not displayed
+```
 
-Arithmetic Evaluation
-- Themost robust and compact syntax uses double parenthesis.
-  - (( TotIncome = DivIncome + Income ))
-  - (( TotalDeduction = TaxPaid + RRSP ))
-  - (( Age = 35 ))
-  - c=$(( a + b )) Note: spaces are not allowed before and after the assignment operator.
-  - (( c = $((a + b)) )), Note: spaces allowed, redundant syntax, but can be used for a lengthy evaluation. Verify the variable c, by echo $c
-- The line (( g = 0 )) is correct, it is an arithmetic evaluation, variables do not need to be preceded by a $ sign. The $ sign is optional in an arithmetic evaluation.
+## 7 Function
 
-Using Quotation
-- $()
-  - command evaluation, e.g. $(pwd)
-  - command substitution (save result of a command to a variable), e.g. today=$( date )
-- $((expression)): $ with double brackets. Arithmetic expansion is a way to perform mathematical operations in Bash. The expression inside the double parentheses is evaluated and replaced with the result of the mathematical operation
-- "": double quote 
-  - allow command expansion, e.g. echo "$(pwd)"
-  - allow variable expansion, e.g. echo "$a"
-  - allow arithmetic expansion, e.g. echo "$(( 1 + 2 ))" 
-- '': single quote: prevent expansion, will literally print what inside, except another pair of single quote inside
-- backquote ``: command substitution, e.g. today=`date`
+### review scripts and class notes on Functions
 
-Using Quotation and $(), (())Examples
-- echo pwd: This will simply print the string "pwd" on the terminal. It does not execute the pwd command to print the current working directory.
-- echo $pwd: It will print a empty string if not set pwd as a environment variable. This will print the value of the environment variable $pwd if it is set.
-- echo "$((pwd))": This will attempt to perform arithmetic evaluation on the string "pwd", but since "pwd" is not a numeric value, it will produce an error.
-- echo '$(pwd)': This will print the literal string $(pwd) on the terminal without executing the pwd command. 
-- echo $(pwd): This will execute the pwd command to print the current working directory, and then print the output on the terminal.
-- echo "$(pwd)": This will execute the pwd command to print the current working directory, and then print the output on the terminal. The $() syntax is used to execute a command and capture its output.
-- echo 1+1: 1+1
-- echo 1 + 1: 1 + 1
-- echo "1+1": 1+1
-- echo '$(1+1)':$(1+1)
-- echo '$((1+3))': $((1+3))
+## 12 Array
 
-- echo ((1+1)): syntax error
-- echo $(1+1): command not found
+```
+//Declaring an Array
+// zero based index
+// use space to seperate elements by default
+array_name=(element1 element2 ... elementN)
 
-- echo "$((1+3))": 4
-- echo $((1+1)): 2
+//access an array
+echo ${array_name[index]}
 
-- echo "$(1+1)": command not found
-- echo `1+1`:command not found
-- echo `$((1+1))`: 2: command not found;
-built-in variables
-- env: display environment variables 
-- ps -u: display all running process 
-- echo $$: identiy the curent process ID
-- echo $PPID: identify the process ID of the parent process
-- echo $PS1: display the first command line prompt.
-- echo $?: This variable contains the exit status of the last executed command. The exit status is an integer value between 0 and 255 that indicates whether the command succeeded or failed. A value of 0 indicates success, while any other value indicates an error.
-- echo $0: This variable contains the name of the currently running shell or script. For example, "myscript.sh".
-- echo $#: This variable contains the number of arguments passed to a script or function. For example, if you run a script with the command "myscript.sh arg1 arg2 arg3", $# would contain the value "3".
+// display the total number of elements in the array, i.e., 13.
+echo ${#orchid[*]}
 
-Process
-- Run a script in the back ground, type: myscript.sh &
+//The length of 2nd element in the array
+echo ${#orchid[1]}
+```
 
-## 12 Array 
-
-1. Declaring an Array
-- zero based index
-- use space to seperate elements by default
-- orchid=(brassavola brassia cattleya cymbidium dendrobium encyclia  laelia masdevallia miltonia odontoglossum oncidium paphiopedilum phalaenopsis)
-
-2. access an array
-- Elements of an array can be accessed using the syntax: echo ${orchid[0]}
-
-3. length of an array and length of an element in an array
-- The command echo ${#orchid[*]} will display the total number of elements in the array, i.e., 13.
--The length of 2nd element in the array is given by: echo ${#orchid[1]}
-
-
-## Final Prep
-
-### 2. Basic Linux commands
-(a) home directory for root, home directory of user
-(b) Absolute path, relative path
-(c) Change Directory. cd .., cd ../..
-(d) Rename file using mv
-(e) Remove file using rm
-(f) Remove non empty directory using rm
-(g) Remove empty directory using rmdir
-(h) Display inode number using ls -i
-(i) present (current) working directory using pwd
-(j) create empty file using touch, change date and time stamp using touch.
-(k) parameter expansion using braces f g, example: mkdir -p flecture,labg, combined with cp, mv,
-rm, touch. How many directories and files are created? Review Test question.
-(l) command history $HISTSIZE, $HISTFILE, clearing history
-(m) grep, cut, cat
-(n) whoami, passwd, uname, su
-(o) difference between cat /etc/shells, echo $SHELLS
-(p) POSIX, Portable Operating System, an IEEE Standard.
+## Final Exam Prep
 
 ### 3. File permission
+
 (a) chmod, rwx, owner (user), group and other
 (b) chown, chgrp.
 (c) gpasswd, groupadd, useradd, usermod, userdel
 (d) newgrp, login to new group
-(e) hard links, soft links
-(f) redirection,
-// > >> 1> 2> &> <
-stdout, stdin, stderr
-
 (g) do not confuse between the default symbol for PS2 and redirection symbol
 (h) There are four prompts PS1, PS2, PS3 and PS4. Differentiate between PS1 and PS2. PS3 and PS4 are
 not covered in this course.
 
 ### 4. File System
+
 (a) fdisk -l /dev/sdb, Review test question. Partitions, Logical drives, physical drives, extended
 drives, space on disk.
 (b) Logial memory, physical memory, virtual memory
 (c) swap space on HDD
 
 ### 5. User Management
+
 (a) Know the difference between /etc/shadow and /etc/passwd
 (b) Which configuration files are affected when the users password is changed.
 (c) Review useradd, usermod, userdel
 
-### 6. Os concept 
-(a) difference between program and process
-n Linux, a program is an executable file that resides on the hard disk and contains instructions that the computer can follow to perform a task. When a program is launched, it becomes a process, which is an instance of the program running in memory. The process contains information about the program's state, such as the current instruction being executed, the values of any variables used by the program, and the program's input and output streams. Multiple processes can be running concurrently, allowing the computer to perform multiple tasks at the same time.
-
-In summary, a program is a file containing executable code, while a process is an instance of that program running in memory, with its own state and system resources.
-
-(b) context switching, process scheduling
-
-(c) preemption
-In Linux, preemption refers to the ability of the kernel to interrupt a running process in order to execute another process that has a higher priority.
-
-(d) interprocess communication models. Message passing and shared memory. Which ones can be used
-by processes on:
-• the same computer
-• different computers
-
-(e) PPID, PID of init and its child processes. init has PID as 1
-
-(f) init is being replaced by systemd in Linux
-
-
-(g) foreground and background processes fg, bg
-
-
-### 7. Shell Scripts and Functions
-(a) declaring arrays, assigning variables, using arrays in scripts
-(b) echo individual elements in an array
-(c) starting a background process using &
-
-(d) export
-In Bash shell, the export command is used to make a variable or function available to child processes of the current shell. When a variable is exported using the export command, it becomes an environment variable, which means it can be accessed by any process or program running in the current shell session.
-
-type: export VARIABLE_NAME=value
-
-(e) Special Variables. $$, $?, $#?
-(f) exporting variables
-(g) positional parameters
-(h) Functions, review scripts and class notes on Functions
-(i) loops using for, while, for x in f1..11..2g, for y in f1..10..3g
-(j) (( )), $(( ))
-(k) case statements
-(l) vim
-(m) test 5 -eq 5 is the same as [ 5 -eq 5 ]
-
-
 Others
-- #!/bin/bash is not the same as #! /bin/bash
-- to check unassigned variables before running a shell script, type: bash shellScriptFile.sh 
-- no need spend too much time on VIM 
 
-Positional Parameters
-- Positional parameters
-  - used to launch a process in the shell
-  - 
+- #!/bin/bash is not the same as #! /bin/bash
+- to check unassigned variables before running a shell script, type: bash shellScriptFile.sh
