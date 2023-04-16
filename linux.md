@@ -28,13 +28,10 @@ CPU cycles it becomes — it is active. A program starts as a process. While run
 - A process is often referred to as a task  
 
 ### preemption
+- The scheduler can take away a process from a resource before the process has completed its task, this action is called preemption; the resource is the CPU.
 
-In Linux, preemption refers to the ability of the kernel to interrupt a running process in order to execute another process that has a higher priority.
-
-### interprocess communication models. Message passing and shared memory. Which ones can be used
-by processes on:
-• the same computer
-• different computers
+### interprocess communication
+- both message passing and shared memory can be used by processes on the same computer.
 
 ### PPID, PID of init and its child processes. init has PID as 1
 
@@ -43,209 +40,168 @@ by processes on:
 ### foreground and background processes fg, bg
 
 ## 2 Basic Command
-
-Shortcut
-
-- ctrl Alt T: Open Terminal
-
-Manual of a utility: man
+- `ctrl Alt T`: Open Terminal Shortcut
+- Manual of a utility: `man`
 
 - Navigate in the document:
-
   - B for back
   - SpaceBar for next,
   - q for quit
 
-    1.1 Change directory: cd
+- Change directory: `cd`
+  - `cd /Year/Month/Day`: this is not gone work coz "/" means the root directory, it doesn't contain a folder named "Year"
+  - go back to main menu: `cd ~` or `cd`
+    - ~ mains the regular user's home directory, for example /home/li000795
+  - go one directory higher: `cd ..`
+  - Go to a absolute directory:
+    - `cd ~/Year/Month`
+    - `cd /home/li000795/Year/Month`
+  - Go to a relative directory
+    - `cd ../home/li000795/etc`
+    - `cd ../../home/`
+  - Press tab button to auto fill the directory name
 
-- Pwd
-- cd /Year/Month/Day: this is not gone work coz "/" means the root directory, it doesn't contain a folder named "Year"
-- go back to main menu: cd ~ or cd
-  - ~ mains the regular user's home directory, for example /home/li000795
-- go one directory higher: cd ..
-- Go to a absolute directory:
-  - cd ~/Year/Month
-  - cd /home/li000795/Year/Month
-- Go to a relative directory
-  - cd ../home/li000795/etc
-  - cd ../../home/
-- Press tab button to auto fill the directory name
+- List files: `ls`
+  - `ls -l`: long version
+  - `ls -a`: all files
+  - `ls -r`: reverse order
+  - `ls -t`: ordered by time, newest/latest at the top
 
-  1.2 List files: ls
+- Make Directory mkdir
+  - Create a directory when parent directory is exist => `mkdir Year/Month/Day`
+  - create parent and child directories => `mkdir -p Year/Month/Day`
 
-- ls -l: long version
-- ls -a: all files
-- ls -la: long details and all files
-- ls -r: reverse order
-- ls -t: ordered by time, newest/latest at the top
+- Create a file: `touch` , `touch -t`
 
-2. Make Directory mkdir
+- Remove Directory: `rmdir`
+  - cannot remove a directory if it is not empty
+  - 3 ways to remove a branch. 
+    - `rmdir -p Year/Month/Day` 
+    - `rmdir Year/Month/Day` , `rmdir Year/Month`, `rmdir Year - rmdir Year/Month/Day Year/Month Year` 
+    - `rmdir -p Year`, won't work, since there is file or directory under "Year"
 
-- Create a directory when parent directory is exist => mkdir Year/Month/Day
-- create parent and child directories => mkdir -p Year/Month/Day
+- Remove Directory and Files: rm
+  - rm -r year, rm -r is will remove dir recursively (remove all files and directories under the directory)
+  - rm -i: prompt before every removal - rm -f: Remove file forcelly, without confirmation
 
-3. Create a file: touch
+- Copying `cp`
+  - -v show copy information
+  - -u only copy update
 
-- touch -t
+- Renaming and moving files `mv`
+  - mv oldfilename newfilename
+  - mv source/folder/file ~/home/li000795/new/folder
 
-  4.1 Remove Directory: rmdir
+- hidden files `ls -la` to see all hiden files
 
-- cannot remove a directory if it is not empty
-- 3 ways to remove a branch. - rmdir -p Year/Month/Day - rmdir Year/Month/Day , rmdir Year/Month, rmdir Year - rmdir Year/Month/Day Year/Month Year - rmdir -p Year, won't work, since there is file or directory under "Year"
+- Absolute and relative Path
+  - ../
+  - /home/li000795/myFolder
 
-  4.2 Remove Directory and Files: rm
+- Concatenating files
+  - `cat /etc/passwd`
+  - `cat /etc/passwd /etc/fstab`
 
-- rm -r year, rm -r is will remove dir recursively (remove all files and directories under the directory)
-- rm -i: prompt before every removal - rm -f: Remove file forcelly, without confirmation
-
-5. Copying
-   copy: cp
-
-- -v show copy information
-- -u only copy update
-
-6. Renaming and moving files
-
-- mv oldfilename newfilename
-- mv source/folder/file ~/home/li000795/new/folder
-
-7. hidden files
-
-- ls -la to see all hiden files
-
-8. Absolute and relative Path
-
-- ../
-- /home/li000795/myFolder
-
-9. Concatenating files
-
-- cat /etc/passwd
-- cat /etc/passwd /etc/fstab
-
-Viewing output
-cat
+- Viewing output `cat`
 
 - more or less: view with scrolling features
-- cat:
-- echo:
+  - cat:
+  - echo:
 
-10. Displaying a dir structure
-    tree structure
+- Displaying a dir structure
+  - tree structure
+  - `tree -L 4 ~`: get the directory tree structure, L means level, 4 means 4 levels,
+  - `tree -L 2 ~`
 
-- tree -L 4 ~: get the directory tree structure, L means level, 4 means 4 levels,
-- tree -L 2 ~
-
-11. Redirecting Output
-
-- redirect standard Error 2>
-  - ls -l 2> error.log
-  - pwd 2>> error.log
-- redirect standard output
-  - append to existing or create new file if not exist >>
-  - create a new if not exist or replace existing content > or 1>
+- Redirecting Output
+  - redirect standard Error `2>`
+    - `ls -l 2> error.log`
+    - `pwd 2>> error.log`
+  - redirect standard output
+    - append to existing or create new file if not exist `>>`
+    - create a new if not exist or replace existing content `>` or `1>`
 
 ```
-// { statement1 ; statement2 ; } all the output will be redirected into the same place
+{ statement1 ; statement2 ; } // all the output will be redirected into the same place
 { echo hello ; echo bye ; } >1.txt // need space before } and after {;
 cat 1.txt
 
-( statement )
-
-	The statement/command will run inside a
-	sub-shell
-
-	e.g.
-		$ ( z=3 )
-		$ echo $z    # the variable z is not
-				declared in the current
-				shell
-		$
+( statement ) // The statement/command will run inside sub-shell
+( z=3 )
+echo $z    # the variable z is not declared in the current shell
 ```
 
-12. Querying the Commands
+- Querying the Commands
 
 - whatis: a brief explanation of Linux commands from the man pages.
 - which: looks for executable files, and shows the file’s location
 - whereis: looks for the filename and displays it. It will also search for the commands source code and its manual pages.
 
-13. Command History
+- Command History
+  - history: see command history
+  - !!: re-run last commamnd
+  - !n
+  - !-n
+  - history -c : remove history
 
-- history: see command history
-- !!: re-run last commamnd
-- !n
-- !-n
-- history -c : remove history
+- Pipe: |
+  - ls -lrt | tail -l
+  - output as a input of 2nd utility
 
-15. Pipe: |
+- Debug
+  - Echo $? : if you get a number not equal to zero, means error
+  - stop the running command: Ctrl C
 
-- ls -lrt | tail -l
-- output as a input of 2nd utility
-
-Debug
-
-- Echo $? : if you get a number not equal to zero, means error
-- stop the running command: Ctrl C
-
-Exit terminal session: exit
-
+- Exit terminal session: `exit`
 - exit this is not same as shutdown the guest operating system
 
-Shutdown Guest Operating System
+- Shutdown Guest Operating System
+  - shutdown -h now?
+  - shutdown -h +20 (shutdown after 20 minutes)
 
-- shutdown -h now?
-- shutdown -h +20 (shutdown after 20 minutes)
-
-Viewing output
-
-- more or less: view with scrolling features
-- cat:
-- echo:
+- Viewing output
+  - more or less: view with scrolling features
+  - cat: 
+  - echo:
 
 ## 3 File Permission
 
-minimal permission when doing something
+- minimal permission when doing something
+  - Copy a file: X for source dir, WX for target dir, R for the file
+  - Delete a file: WX for dir, no require for the file
+  - Move a file: WX for both source and target dir, no require for the file
+  - Run a shell: RX for the file
+  - Run a binary: X for the file
+  - See content of a dir: R for the dir
+  - Without R and X permission on a directory
+    - a user cannot cd to a directory.
+    - a user can ls to the directory and get a partial file listing.
+    - The command ls -l will not show the permission of the file nor its size and ownership.
+    - The find utility will list the file.
+    - The tree utility will not show the directory.
+    - Ubuntu shows the directory with a different color scheme.
 
-- Copy a file: X for source dir, WX for target dir, R for the file
-- Delete a file: WX for dir, no require for the file
-- Move a file: WX for both source and target dir, no require for the file
-- Run a shell: RX for the file
-- Run a binary: X for the file
-- See content of a dir: R for the dir
-- Without R and X permission on a directory
-  - a user cannot cd to a directory.
-  - a user can ls to the directory and get a partial file listing.
-  - The command ls -l will not show the permission of the file nor its size and ownership.
-  - The find utility will list the file.
-  - The tree utility will not show the directory.
-  - Ubuntu shows the directory with a different color scheme.
+- Umask
+  - A mask can be defined as Selective permeability.
+  - To display the umask in symbolic mode type `umask -S`
 
-Umask
+- umask vs chmod
+  - umask: change permission for FUTURE dir and files
+  - chmod: change permission for EXIST dir and files
 
-- A mask can be defined as Selective permeability.
-- To display the umask in symbolic mode type umask -S
-
-umask vs chmod
-
-- umask: change permission for future dir and files
-- chmod: change permission for existing dir and files
-
-chmod
-
-- chmod [ugoa][+-=][rwx] [object]
-- who: user/owner, group, others, all
-  - Owner, creator of the file
-  - Group, a group of users. A group user can own a file and can assign access permission.
-    - Others, all other users who are usually with a guest account. They do not belong to a group and are assigned a login and password to perform minimal tasks on the system.
-- operators: +, = (set explicitily and remove all others), -
-- permission: r(read), w(write), x(execute)
+- chmod
+  - `chmod [ugoa][+-=][rwx] [object]`
+  - who: user/owner, group, others, all
+    - Owner, creator of the file
+    - Group, a group of users. A group user can own a file and can assign access permission.
+      - Others, all other users who are usually with a guest account. They do not belong to a group and are assigned a login and password to perform minimal tasks on the system.
+  - operators: +, -, = (set explicitily and remove all others)
+  - permission: r(read), w(write), x(execute)
 
 - The time the file was last modified.
-- The time the file was last accessed. ls -ul
+- The time the file was last accessed. `ls -ul`
 
 ## 4 File System
-
-cat vs echo?
 
 $PATH: environment variable
 
@@ -292,114 +248,91 @@ mounting and / root dir
 
 ## 5 User Management
 
-Verify the current status / newly created accounts
+- Verify the current status / newly created accounts `tail /etc/passwd`
+- check a specific account "chinua" `grep chinua /etc/passwd`
+- View the /etc/shadow file, has expiry date info `sudo tail /etc/shadow`
+- observe the owner and groups in home directory. `ls -l /home`
 
-- tail /etc/passwd
-- check a specific account "chinua"
-  - grep chinua /etc/passwd
+### 5.1 User Creation
 
-View the /etc/shadow file, has expiry date info
-
-- sudo tail /etc/shadow
-
-list the contents of the home directory, observe the owner and group.
-
-- ls -l /home
-
-### User Creation
-
-Add a user
-
-- sudo useradd alex -m -d /home/alex -e 2030-12-31 -s /bin/bash
-  - -m create the home directory
+- Add a user
+  - `sudo useradd alex -m -d /home/alex -e 2030-12-31 -s /bin/bash`
+  - -m create the home directory. if no "-m", you need to manually mkdir 
   - -d to set directory
   - -e expiry date
   - -s If you do not specify this option, Ubuntu’s will use the default login shell /bin/sh
   - If no group is specified in the command, the user's primary group will be the same as the username by default.user
-  - The users pw shell is stored in the /etc/passwd file.
+  - The users pw shell is stored in the /etc/passwd file.  `grep <username> /etc/passwd`
 
-### create group and create user with group names
+### 5.2 create group and create user with group names
 
-Create a group: addgroup
+- Create a group: `sudo addgroup <group_name>`
+- Delete a group: `groupdel`
+- !user's primary group will also be one of the default group; i.e. one default group will be the same as the primary group.
 
-- sudo addgroup archery
-  Delete a group: groupdel
+- 1 Add a user and not specify group i.e. not use `-G` 
+  - If no group is specified in the command, the user's primary and default group will be the same as the username.
+  - `sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash` the primary and default group will be "buena"
 
-- !user's primary group will also be one of the default group; other word, one default group will be the same as the primary group.
+- 2 Add a user without creating a default group (i.e. not use the username as the primary and default group name) 
+ `sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -N`
+  - primary group is "users", one of the default group is "users"
+  - -N, no default group i.e. not using the user name as the primary and default group name
 
-Add a user and not specify group
+- 3 Add a user buena and associate her with certain groups.
+  - `sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -G sudo,badminton,chess`
+  - `-G` specify groups
+  - The primary group will be "buena", and the default groups will be "buena, sudo, badminton, chess"
 
-- If no group is specified in the command, the user's primary and default group will be the same as the username.
+- 4 Add a user buena, without creating default group, and associate her with certain groups.
+  - `sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -N -G sudo,badminton,chess`
+  - `-G` specify groups
+  - The primary group will be "user", and the default groups will be "user, sudo, badminton, chess"
 
-Add a user without creating a default group using -N
+### 5.3 change user's id and group
 
-- -N means primary group will be "users", one of the default group will be "users"
-- sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -N
+- The administrator wants to change the full name for userid jody0657 to Jody Wilson. `sudo usermod -c "Jody Wilson" jody0657`
 
-Add a user buena and associate her with certain groups.
+- Change user (one to many) DEFAULT groups (archery, sudo and cdrom) using
+`sudo usermod -G archery,sudo,cdrom ariana`
+  - Note: Do not put a space between the group names.
+  - It will change the preset default groups except the group has the same name of Primary group
 
-- -G specify groups
-- sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -N -G sudo,badminton,chess
-- The primary group will be "users", and the default groups will be "users, sudo, badminton, chess"
+- Change user's PRIMARY group `sudo usermod -g cdrom username`
 
-### change user's id and group
+- Temporarily changing a users PRIMARY group `newgrp groupname`
 
-The administrator wants to change the full name for userid jody0657 to Jody Wilson .
+### 5.4 Display the user's primary and default groups
 
-- sudo usermod -c "Jody Wilson" jody0657
+- Displaying the DEFAULT group associations for a user account
+  - `groups` (when you are the user)
+  - `groups` boshu (when you are not the current user)
 
-Change user (one to many) DEFAULT groups (archery, sudo and cdrom) using
+- Check the id, primary group and default/supplementory group of a user account
+`id username`
+  - "gid=" - primary group 
+  - "groups=" default/supplementory group 
 
-- sudo usermod -G archery,sudo,cdrom ariana
-- Note: Do not put a space between the group names.
-- It will change the preset default groups except the group has the same name of Primary group
+### 5.5 user modification
 
-Change user's PRIMARY group
++ Expirty Date
+  - Change the Account Expiry Date for a User
+    - method 1: `sudo chage -E 2031-12-31 chris`
+    - method 2: `sudo usermod -e 2031-12-31 chris`
+      - -e is also used in useradd
+  - Check the expiry date of user chris `sudo tail /etc/shadow | grep chris`
 
-- sudo usermod -g cdrom username
++ Adding Comments to a User
+  - `sudo usermod -c "Chinua Achebe, Nigeria" chinua`
 
-Temporarily changing a users PRIMARY group
++ Deleting a Users Account dimona
+  - `userdel -r dimona`
 
-- newgrp groupname
++ Adding a password
+  - `sudo passwd ariana`
+  - `sudo passwd boshu: 19900416`
 
-### Display the user's primary and default groups
-
-Displaying the DEFAULT group associations for a user account
-
-- groups (when you are the user)
-- groups boshu
-
-Check the id, primary group and default/supplementory group of a user account
-
-- id username
-  - primary group will be listed after the text "gid="
-  - default/supplementory group will be listed after the text "groups=".
-
-### user modification
-
-Expirty Date
-
-- Change the Account Expiry Date for a User
-  - method 1: sudo chage -E 2031-12-31 chris
-  - method 2: sudo usermod -e 2031-12-31 chris
-    - -e is also used in useradd
-- Check the expiry date of user chris
-  - sudo tail /etc/shadow | grep
-
-Adding Comments to a User
-
-- sudo usermod -c "Chinua Achebe, Nigeria" chinua
-
-Deleting a Users Account dimona
-
-- userdel -r dimona
-
-Adding a password
-
-- sudo passwd ariana
-- sudo passwd boshu: 19900416
-
-### Users Switch
+### 5.6 Users Switch
 
 - Login in another user `su - boshu`
 - check your role `whoami`
@@ -674,11 +607,6 @@ drives, space on disk.
 (b) Logial memory, physical memory, virtual memory
 (c) swap space on HDD
 
-### 5. User Management
-
-(a) Know the difference between /etc/shadow and /etc/passwd
-(b) Which configuration files are affected when the users password is changed.
-(c) Review useradd, usermod, userdel
 
 Others
 
