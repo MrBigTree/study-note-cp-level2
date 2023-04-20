@@ -290,6 +290,7 @@ public void readData(String filename) throws FileNotFoundException
 - In throws clause, you may specify all checked exceptions that this method may throw, and you may also list unchecked exceptions
 - NOTE: Java provides exception facility such that: some methods can detect, some methods can handle, and other methods just pass them along.
 - Throw early, catch late
+- When a method has a throws clause, it signifies that the method may encounter a specified exception, but it does not catch or handle it. Instead, it passes the responsibility of handling the exception to the calling method.
 
 ### ! Think it through
 - if a subclass method overrides a superclass method, it is an error for the subclass method to list more exceptions in its throws clause than the superclass method does. A subclass's throws clause can contain a subset of a superclass's throws clause.
@@ -623,8 +624,7 @@ Queue<String> q = new LinkedList<>();
 - Why wouldn't you want to use an array list for implementing a queue? Answer: Depending on whether you consider the 0 position the head or the tail of the queue, you would either add or remove elements at that position. Both are inefficient operations because all other elements need to be moved.
 
 ### Stack
-- When you need a queue, initialize a Queue variable with a
-LinkedList object:
+
 
 ### Choosing a Collection
 - Determine how you access the values.
@@ -659,23 +659,31 @@ Exam will have
 - Primitive data types such as int, char and float do not work with generics. primitive types cannot be directly converted to Object.
 
 TIT: 
-- The standard library provides a class HashMap<K, V> with key type K and value type V. Declare a hash map that 
-maps strings to integers. Answer: HashMap<String, Integer>
-- The binary search tree class is an example of generic
-programming because you can use it with any classes 
-that implement the Comparable interface. Does it achieve genericity through inheritance or type parameters? Answer: It uses inheritance.
-- How would you use the generic Pair class to construct 
-a pair of strings "Hello" and "World"? Answer: new Pair<String, String>("Hello", "World")
-- How would you use the generic Pair class to construct a 
-pair containing "Hello" and 1729? Answer: new Pair<String, Integer>(“Hello”, 1729)
-- What is the difference between an ArrayList<Pair<String, Integer>> and a Pair<ArrayList<String>, Integer>? Answer: An ArrayList<Pair<String, Integer>> contains multiple pairs, for example [(Tom, 1), (Harry, 3)]. A pair<ArrayList<String>, Integer> contains a list of strings and a single integer, such as ([Tom, Harry], 1)
+- The standard library provides a class HashMap<K, V> with key type K and value type V. Declare a hash map that maps strings to integers. Answer: HashMap<String, Integer>
 
-Generic Methods
+- The binary search tree class is an example of generic programming because you can use it with any classes that implement the Comparable interface. Does it achieve genericity through inheritance or type parameters? Answer: It uses inheritance.
+- How would you use the generic Pair class to construct 
+a pair of strings "Hello" and "World"? 
+`new Pair<String, String>("Hello", "World")`
+
+- How would you use the generic Pair class to construct a pair containing "Hello" and 1729? 
+`new Pair<String, Integer>(“Hello”, 1729)`
+
+- What is the difference between an `ArrayList<Pair<String, Integer>>` and a `Pair<ArrayList<String>, Integer>`? 
+answer `ArrayList<Pair<String, Integer>>` contains multiple pairs, for example [(Tom, 1), (Harry, 3)]. `Pair<ArrayList<String>, Integer>` is a single pair, that contains a list of strings and a single integer, such as ([Tom, Harry], 1).
+
+### Generic Methods
 - Generic method: method with a type parameter.
 - Can be declared inside non-generic class.
 Tips 
-- Is the getFirst method of the Pair class a generic method? Answer: No – the method has no type parameters. It is an ordinary method in a generic class
+- Is the getFirst method of the Pair class a generic method? Answer: No – the method has no type parameters. It is an ordinary method in  
 
+- In Java, when defining a generic method, the type parameter is declared within angle brackets (<>) before the return type of the method. 
+- A type parameter should be declared only once in the type-parameter section. 
+- The type parameter can then be used within the method signature and body.
+- you can use multiple different type parameters within the same method. For example: `public <T, U> void someMethod(T tParam, U uParam) {// method mplementation}`
+
+### generic class
 
 Wildcard with upper bound ? extends B Any subtype of B
 Wildcard with lower bound ? super B Any supertype of B

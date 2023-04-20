@@ -17,27 +17,75 @@ CPU cycles it becomes — it is active. A program starts as a process. While run
   - Created by the operating system when a program is launched, runs independently of other processes. 
   - Has a unique process ID (PID) that identifies it to the operating system and other processes.
 
+### components
+- scheduler: allocates a CPU time to a process.
+- kernel
+
+
 ### kernel
 - The kernel is the core component of the operating system that manages hardware and software resources, and provides a platform for applications to run on.
 - The kernel is responsible for memory management, device management, process management, and security management.
 - In Linux, the kernel is a monolithic kernel that contains all essential components of the operating system.
 - The kernel's performance and functionality have a direct impact on the system's stability, reliability, and security.
 
-### context switching, process scheduling
-- The CPU switches its time between each process rapidly giving the impression that each process is getting the CPU’s attention all the time.
+- provides efficient use of main memory, useful in embedded systems and small computers
+- a failure in kernel code can bring down an entire operating system.
+- provides higher resiliency, a problem in a section of the kernel code will not bring down the entire system.
+- has an overhead when loading kernel modules from secondary storage.
+
+### Symmetrical Multiprocessor (SMP)
+- All processors can share all I/O devices.
+- A single operating system manages more than one processor. 
+- All processors can access the same memory.
+
+### context switching
 - A process is often referred to as a task  
+- A CPU switches from one process to another, and provides CPU cycles to the process it currently attends to.
+- The CPU switches its time between each process rapidly giving the impression that each process is getting the CPU’s attention all the time.
+
 
 ### preemption
-- The scheduler can take away a process from a resource before the process has completed its task, this action is called preemption; the resource is the CPU.
+- A higher priority process needs CPU time.
+- The scheduler can take away a process from a CPU (resource) before the process has completed its task
+- A task is currently running using the CPU; it is interrupted by the kernel with the intention of resuming later.
 
-### interprocess communication
+### virtual memory
+- A memory management system that uses secondary memory to store parts of a program running in main memory, giving the impression that the computer has more memory than it actually does. 
+- A computer's Main Memory is abstracted to another device which has a larger storage space than the main memory. This technique allows a user to run programs that are larger than the main memory available to a user.
+
+### swap 
+- It is preferable to allocate space contiguously, i.e., space without intervals.
+- the action of transferring data from main memory to secondary storage.
+
+### daemon
+- A common name for a background process in Unix that provides services such as user login, printing, error logging among other services.
+
+### paging 
+
+### interprocess communication mechanisms
 - both message passing and shared memory can be used by processes on the same computer.
+- examples: message passing, shared memory, pipes
+
 
 ### PPID, PID of init and its child processes. init has PID as 1
+- In a Unix/Linux system, init is the first process that runs when the system boots up, and it has a Process ID (PID) of 1. It is the parent of all other processes and initializes the system environment, starts other services, and manages system shutdown or reboot.
+- To see the PID and Parent Process ID (PPID) of init and its child processes, you can use the ps command with specific flags:
+- init is being replaced by `systemd` in Linux
+- foreground and background processes `fg`, `bg`
 
-### init is being replaced by systemd in Linux
 
-### foreground and background processes fg, bg
+### Portable Operating Systems Interface (POSIX)
+- standards specified by IEEE Computer Society for maintaining compatibility between operating systems.
+
+
+- Real Time Operating Systems
+  - VxWorks 
+  - QNX
+  - FreeRTOS
+- UNIX variants
+  - IBM's AIX,
+  - HP's HPUX
+  - Apple's MacOS
 
 ## 2 Basic Command
 - `ctrl Alt T`: Open Terminal Shortcut
@@ -98,20 +146,8 @@ CPU cycles it becomes — it is active. A program starts as a process. While run
   - ../
   - /home/li000795/myFolder
 
-- Concatenating files
-  - `cat /etc/passwd`
-  - `cat /etc/passwd /etc/fstab`
-
-- Viewing output `cat`
-
-- more or less: view with scrolling features
-  - cat:
-  - echo:
-
 - Displaying a dir structure
-  - tree structure
   - `tree -L 4 ~`: get the directory tree structure, L means level, 4 means 4 levels,
-  - `tree -L 2 ~`
 
 - Redirecting Output
   - redirect standard Error `2>`
@@ -120,11 +156,15 @@ CPU cycles it becomes — it is active. A program starts as a process. While run
   - redirect standard output
     - append to existing or create new file if not exist `>>`
     - create a new if not exist or replace existing content `>` or `1>`
+  -  redirect both standard output (stdout) and standard error (stderr) 
+    - command &> both.txt
+    - command 1> both.txt 2>&1
+    - command 2> both.txt 1>&2
 
 ```
 { statement1 ; statement2 ; } // all the output will be redirected into the same place
 { echo hello ; echo bye ; } >1.txt // need space before } and after {;
-cat 1.txt
+`cat 1.txt`
 
 ( statement ) // The statement/command will run inside sub-shell
 ( z=3 )
@@ -139,10 +179,14 @@ echo $z    # the variable z is not declared in the current shell
 
 - Command History
   - history: see command history
-  - !!: re-run last commamnd
-  - !n
-  - !-n
+  - `!!`: re-run last commamnd
+  - `!n`  a 
+  - `!-n` runs a command with an offset of n
   - history -c : remove history
+  - $HISTFILE, by default the history file is a hidden file .bash_history
+
+
+
 
 - Pipe: |
   - ls -lrt | tail -l
@@ -153,17 +197,26 @@ echo $z    # the variable z is not declared in the current shell
   - stop the running command: Ctrl C
 
 - Exit terminal session: `exit`
-- exit this is not same as shutdown the guest operating system
+  - exit this is not same as shutdown the guest operating system
 
 - Shutdown Guest Operating System
   - shutdown -h now?
   - shutdown -h +20 (shutdown after 20 minutes)
+
+- Concatenating files
+  - `cat /etc/passwd`
+  - `cat /etc/passwd /etc/fstab`
 
 - Viewing output
   - more or less: view with scrolling features
   - cat: 
   - echo:
 
+- parameter expansion
+  - `mkdir -p [lecture,lab]`
+  - combined with cp, mv, rm, touch.
+
+- 
 ## 3 File Permission
 
 - minimal permission when doing something
@@ -192,9 +245,9 @@ echo $z    # the variable z is not declared in the current shell
 - chmod
   - `chmod [ugoa][+-=][rwx] [object]`
   - who: user/owner, group, others, all
-    - Owner, creator of the file
+    - user/owner, creator of the file
     - Group, a group of users. A group user can own a file and can assign access permission.
-      - Others, all other users who are usually with a guest account. They do not belong to a group and are assigned a login and password to perform minimal tasks on the system.
+    - Others, all other users who are usually with a guest account. They do not belong to a group and are assigned a login and password to perform minimal tasks on the system.
   - operators: +, -, = (set explicitily and remove all others)
   - permission: r(read), w(write), x(execute)
 
@@ -203,48 +256,76 @@ echo $z    # the variable z is not declared in the current shell
 
 ## 4 File System
 
-$PATH: environment variable
+- $PATH: environment variable
+  - echo $PATH will see all the dir of your $PATH variable,
+  - you can put shell file under these folders, and input the shell file name in command line to run it (not need to specify the dir of that shell).
 
-- echo $PATH will see all the dir of your $PATH variable,
-- you can put shell file under these folders, and input the shell file name in command line to run it (not need to specify the dir of that shell).
+- Root of the directory
+  - etc: host-specific system and its application configuration files; etc/shells has a list of shells available
+  - bin: contains executable files required for the system and its users
+  - sbin: system binary files
+  - dev: device files that represent physical devices on the system
+  - home: user home dir
+  - lib: essential shared libary  
+  - tmp: temporary files/bin contains executable files required for the system and its users,
+  - var: variable files. log files and admin files.
+  - root: home dir for root user
+  - usr: multi user utilities and applications
+  - mnt: mount point for temp mount filesystems 
 
-Root of the directory
 
-- etc: host-specific system and its application configuration files; etc/shells has a list of shells available
-- bin: contains executable files required for the system and its users
-- sbin: system binary files
-- dev: device files that represent physical devices on the system
-- home: user home dir
-- lib: essential shared libary
-- tmp: temporary files/bin contains executable files required for the system and its users,
-- var: variable files
-- root: home dir for root user
-- usr: multi user utilities and applications
-- mnt: mount point for temp mount filesystems
+- File systems for different device
+  - iso9660: CD-ROM
+  - cifs: MSFT, remote, sharing file and other devices on a network;
+  - cfs: remote
+  - ntfs: MSFT, local, the default file system used by Windows operating systems, starting with Windows NT.
 
-Link
+- fstab
+  - a lookup table; mount refer it to mount filesystems
 
+- free: the utility to display the amount of free space and the amount of memory used by the system
+
+- UUID: a hex 128 value that uniquely identifies an object on the internet
+
+- mounting and / root dir
+  - always mount devices and filesystems one level below the root dir
+  - don't mount in /, system will crush
+  - root / is mounted automatically during boot up
+  - you can't mount two filesystems at the same mount point
+
+### fdisk -l /dev/sdb 
+- is a command used to display partition information for the specified device /dev/sdb. The output of this command will show details such as the number of partitions, their size and type, and the available space on the disk. Here are some key terms related to disk partitions:
+- Partitions: A partition is a logical section of a physical disk that can be used to store data or install an operating system.
+- Physical drives: A physical drive is a storage device, such as a hard disk or solid-state drive (SSD), that is installed in a computer.
+- Extended drives: An extended partition is a type of partition that can be divided into one or more logical drives.
+- Logical drives: A logical drive is a partition that has been formatted and assigned a drive letter or mount point.
+- Space on disk: This refers to the amount of free space available on the disk, which can be used to store data or install programs.
+- how many logical drives are created? check the extended drive start and end. And count how many drives has start and end in this range.
+- you can have 1 to 4 partitions (primary + extended)
+- logical drives are reside in extended drive
+- you are only allow to have one extended drive (but you can have multiple logical drive reside in extended drive)
+- all drive except extended drive and its logical drives are primary partitions.
+
+
+### Memory
+- Physical memory: Also known as RAM (Random Access Memory), physical memory is the actual hardware in a computer that stores DATA and instructions temporarily.
+- Logical memory: This refers to the memory addresses used by a PROGRAM or PROCESS. It is an abstract concept that allows a program to access physical memory.
+- Virtual memory: Virtual memory is a technique that allows a computer to use hard disk space as an extension of physical memory. When physical memory is full, data is temporarily swapped to the hard disk, freeing up space in physical memory for other processes.
+
+### Swap space 
+- is a portion of a hard disk that is used as virtual memory when the system runs out of physical memory. Swap space can be configured on a Linux system using the `mkswap` command, and is typically stored in a dedicated partition or a swap file. When the system needs more memory than is available in physical memory, it will transfer less frequently used data from RAM to the swap space on the hard disk. This allows the system to continue running, albeit more slowly, without crashing due to lack of memory.
+- check all swap:   `swapon -s`
+
+### Link
 - a hard link can not created for a dir
+- hard link has the same inode as the original file
+- soft link has different inode as the file
+- when delete the file, soft link still exist but inactive
+- when delete the file, hard link ?
+- cannot create hard link for directory
+- 
 
-File systems for different device
 
-- iso9660: CD-ROM
-- cifs: MSFT, remote, sharing file and other devices on a network;
-- cfs: remote
-- ntfs: MSFT, local, the default file system used by Windows operating systems, starting with Windows NT.
-
-fstab: a lookup table; mount refer it to mount filesystems
-
-free: the utility to display the amount of free space and the amount of memory used by the system
-
-UUID: a hex 128 value that uniquely identifies an object on the internet
-
-mounting and / root dir
-
-- always mount devices and filesystems one level below the root dir
-- don't mount in /, system will crush
-- root / is mounted automatically during boot up
-- you can't mount two filesystems at the same mount point
 
 ## 5 User Management
 
@@ -260,28 +341,28 @@ mounting and / root dir
   - -m create the home directory. if no "-m", you need to manually mkdir 
   - -d to set directory
   - -e expiry date
-  - -s If you do not specify this option, Ubuntu’s will use the default login shell /bin/sh
+  - -s If you do not specify this option, Ubuntu’s will use the default login shell /bin/sh (the shell specified in in the /etc/default/useradd file)
   - If no group is specified in the command, the user's primary group will be the same as the username by default.user
-  - The users pw shell is stored in the /etc/passwd file.  `grep <username> /etc/passwd`
+  - The users pw shell is stored in the /etc/passwd file.  `grep <username> /etc/passwd`.
 
 ### 5.2 create group and create user with group names
 
 - Create a group: `sudo addgroup <group_name>`
-- Delete a group: `groupdel`
+- Delete a group: `groupdel`.
 - !user's primary group will also be one of the default group; i.e. one default group will be the same as the primary group.
 
-- 1 Add a user and not specify group i.e. not use `-G` 
+- 1 Add a user and not specify groups 
   - If no group is specified in the command, the user's primary and default group will be the same as the username.
-  - `sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash` the primary and default group will be "buena"
+  - `sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash` the primary and default group will be "buena".
 
-- 2 Add a user without creating a default group (i.e. not use the username as the primary and default group name) 
+- 2 Add a user with `-N` to not creating a default group (i.e. not use the username as the primary and default group name) 
  `sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -N`
   - primary group is "users", one of the default group is "users"
-  - -N, no default group i.e. not using the user name as the primary and default group name
+  - -N, no default group i.e. NOT using the user name "buena" as the primary and default grousroup name
 
 - 3 Add a user buena and associate her with certain groups.
   - `sudo useradd buena -m -d /home/buena -e 2030-12-31 -s /bin/bash -G sudo,badminton,chess`
-  - `-G` specify groups
+  - `-G` specify supplementory groups and replacing existing ones.
   - The primary group will be "buena", and the default groups will be "buena, sudo, badminton, chess"
 
 - 4 Add a user buena, without creating default group, and associate her with certain groups.
@@ -332,11 +413,22 @@ mounting and / root dir
   - `sudo passwd ariana`
   - `sudo passwd boshu: 19900416`
 
++ change a user's shell path. 
+  - The shell path specifies the location of the user's login shell, which is responsible for interpreting commands entered in a terminal session. 
+  - the default shell path is specified in the /etc/default/useradd file
+  - `chsh -s /bin/bash username`
+  - `sudo usermod -s /bin/bash username`
+
+
+
 ### 5.6 Users Switch
 
 - Login in another user `su - boshu`
 - check your role `whoami`
 - Exit so you return as a regular user `exit`
+
+### 5.7 change user's login shell
+- You would like to change your user's login shell. You can find the available ones by: `echo /etc/shells`
 
 ## 6 Shell Script
 
@@ -352,16 +444,15 @@ mounting and / root dir
 
 ### 6.2 `(())` vs `$()` vs `$(())` vs `""` vs `''` vs ` `` `;
 
-`((arithmetic evaluation))`
-
-- arithmetic evaluation. The most robust and compact syntax uses double parenthesis.
-
+`(())`arithmetic evaluation
 ```
-# The $ sign is optional in an arithmetic
+// arithmetic evaluation.  The most robust and compact syntax uses double parenthesis.
+// The $ sign is optional in an arithmetic evaluation
 (( TotIncome = DivIncome + Income ))
 (( TotalDeduction = TaxPaid + RRSP ))
 (( Age = 35 )) evaluation.
 
+// arithmetic expansion
 c=$(( a + b )) # Note: spaces are not allowed before and after the assignment operator.
 
 (( c = $((a + b)) )) # Note: spaces allowed, redundant syntax, but can be used for a lengthy evaluation. Verify the variable c, by echo $c
@@ -378,17 +469,19 @@ echo ((1+1))  // syntax error
 ```
 echo $(1+1) // command not found
 echo $(pwd) // /home/li000795
+dir_var="/tmp"
+ls $( echo $dir_var )
 ```
 
-- $((expression))
-- Arithmetic expansion inside the double parentheses is evaluated and replaced with the result of the mathematical operation
+` $(())`Arithmetic expansion
+- inside the double parentheses is evaluated and replaced with the result of the mathematical operation
 
 ```
 echo "$((pwd))" // can not perform arithmetic evaluation, error.
 echo $((1+1)) //  2
 ```
 
-"": double quote
+`" "`: double quote
 
 ```
 // allow command expansion for $ with single bracket
@@ -415,7 +508,6 @@ echo '$(pwd)'  // $(pwd)
 ```
 
 backquote ``: command substitution, e.g. ` today=`date` `
-
 ```
 echo `1+1` //command not found
 echo `$((1+1))` // 2: command not found;
@@ -423,7 +515,10 @@ echo `$((1+1))` // 2: command not found;
 
 ### 6.3 condition, case, if-else
 
-- test 5 -eq 5 is the same as [ 5 -eq 5 ]
+- `test 5 -eq 5` is the same as `[ 5 -eq 5 ]`
+
+- in a Bash script, if a command or function returns a zero exit status, it is considered true and the if statement will execute the code inside the if block, and if it returns a non-zero exit status, it is considered false and the if statement will execute the code inside the else block.
+
 
 ```
 #!/bin/bash
@@ -496,17 +591,19 @@ done
 ```
 
 ### 6.5 Process
+- `echo $PPID` // identify the parent process's  process ID
+- `echo $$` // identiy the curent process ID
+- `echo $!` // Get the child process ID (PID)
+- `ps -u` // display all running process
 
 - `myscript.sh &` // starting a script in the back ground, type:
 - `env` // display environment variables
-- `ps -u` // display all running process
-- `echo $$` // identiy the curent process ID
-- `echo $PPID` // identify the process ID of the parent process
 
 - `echo $PS1` // display the first command line prompt.
 - `echo $?` // This variable contains the exit status of the last executed command. The exit status is an integer value between 0 and 255 that indicates whether the command succeeded or failed. A value of 0 indicates success, while any other value indicates an error.
-- `echo $0` // This variable contains the name of the currently running shell or script. For example, "myscript.sh".
 - `echo $#` // This variable contains the number of arguments passed to a script or function. For example, if you run a script with the command "myscript.sh arg1 arg2 arg3", $# would contain the value "3".
+- `echo $0` // This variable contains the name of the currently running shell or script. For example, "myscript.sh".
+- `echo $@` list all parameters, excluding the 0th parameter
 
 ### 6.6 exporting variables
 
@@ -515,7 +612,9 @@ done
 ```
 myvar="Hello, world!"
 export myvar
-env | grep myvar // it will confirm myvar is in the list of all environmental variables
+
+// it will confirm myvar is in the list of all exported environmental variables
+env | grep myvar 
 ```
 
 ### 6.7 positional parameters
@@ -541,7 +640,8 @@ echo b\*.sh:
 echo "$(ls -l log.03052015 | cut -d" " -f4)"
 
 // read
-echo "Enter your test 1 grade:"; read test1Grade
+echo "Enter your test 1 grade:"; 
+read test1Grade
 
 // read -p
 read -p "Enter your test 1 grade:" test1Grade
@@ -565,10 +665,60 @@ echo $test1Grade
 
 // the -s option: silent option to enter text that is not displayed
 ```
+### 6.9 execute the shell in current directory
+- `bash quiz.sh` // it will run in child process
+- `source quiz.sh` 
+  - // it will run in current process. 
+  - When a script is sourced using the source or . command, it is read and executed in the current shell environment, rather than in a new subshell. In this case, the script does not need execute permission to run, since it is not being executed as a separate process.
+
+- `. quiz.sh`
+- `./quiz.sh` // script using the interpreter specified in the shebang line at the beginning of the script. This is usually #!/bin/bash or similar. Any changes made to environment variables or other shell settings within the script will only affect that child process, and will not be reflected in the parent process or any other processes.
 
 ## 7 Function
 
-### review scripts and class notes on Functions
+### declare function
+```
+function myFunction() {
+    # function body goes here
+}
+
+myFunction() {
+    # function body goes here
+}
+```
+
+### declare local variable
+```
+function myFunction() {
+    local myVariable="some value"
+    # rest of the function body goes here
+}
+```
+
+### declare global variable 
+- myVariable="some value"
+- if a variable inside a function block but without "local" keyword, then it will be a global variable that accessable in the script
+
+### functions at command line
+- a temporary function 
+
+```
+// write a function in command line
+function add(){
+  (( sum = $1 + $2 ))
+  echo $sum 
+}
+
+// this function need to be exported to be used 
+export -f add
+
+// call the function 
+add 4 5 
+
+// check the function is listed in the list of exported environment variable, BASH_FUNC_add%%
+env 
+```
+
 
 ## 12 Array
 
@@ -587,26 +737,6 @@ echo ${#orchid[*]}
 //The length of 2nd element in the array
 echo ${#orchid[1]}
 ```
-
-## Final Exam Prep
-
-### 3. File permission
-
-(a) chmod, rwx, owner (user), group and other
-(b) chown, chgrp.
-(c) gpasswd, groupadd, useradd, usermod, userdel
-(d) newgrp, login to new group
-(g) do not confuse between the default symbol for PS2 and redirection symbol
-(h) There are four prompts PS1, PS2, PS3 and PS4. Differentiate between PS1 and PS2. PS3 and PS4 are
-not covered in this course.
-
-### 4. File System
-
-(a) fdisk -l /dev/sdb, Review test question. Partitions, Logical drives, physical drives, extended
-drives, space on disk.
-(b) Logial memory, physical memory, virtual memory
-(c) swap space on HDD
-
 
 Others
 
